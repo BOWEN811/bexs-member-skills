@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEXS 會員技能包 · 動畫簡報</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{--paper:#faf6ee;--ink:#332f28;--ink2:#5b554b;--line:#e3dccf;
+    --orange:#c15f3c;--orange-d:#9b4a2c;--brand:#efe7d6;--tip:#f6eccf;--tip-line:#d8c178;
+    --ok:#e2efdc;--ok-line:#9cc587;--card:#fdfaf3;}
+  html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink);
+    font-family:"PingFang TC","Heiti TC",-apple-system,sans-serif;}
+  .serif{font-family:Georgia,"Songti TC","PingFang TC",serif;}
+  /* 紙質微紋理 */
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+    background:radial-gradient(circle at 20% 15%,rgba(193,95,60,.05),transparent 40%),
+      radial-gradient(circle at 85% 85%,rgba(193,95,60,.04),transparent 45%);}
+
+  .slide{position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;z-index:3;}
+  .slide.active{display:flex;}
+
+  .bar{position:fixed;left:0;top:0;bottom:0;width:12px;z-index:5;
+    background:linear-gradient(180deg,#c15f3c,#a84e30);}
+
+  .kicker{color:var(--orange);letter-spacing:5px;font-size:clamp(13px,1.5vw,20px);
+    font-weight:700;margin-bottom:16px;display:inline-flex;align-items:center;gap:11px;}
+  .kicker .dot{width:10px;height:10px;border-radius:50%;background:var(--orange);
+    animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+  h1{font-size:clamp(38px,6vw,82px);line-height:1.12;color:#2a2620;font-weight:800;letter-spacing:1px;}
+  h1 .hl{color:var(--orange);}
+  h2{font-size:clamp(26px,3.6vw,46px);color:#2a2620;font-weight:800;letter-spacing:.5px;}
+  h2 .hl{color:var(--orange);}
+  .sub{margin-top:16px;font-size:clamp(15px,2vw,28px);color:var(--ink2);letter-spacing:.5px;}
+  .sub b{color:var(--orange);}
+  .foot{margin-top:30px;display:flex;gap:11px;flex-wrap:wrap;}
+  .chip{font-size:clamp(12px,1.3vw,18px);padding:8px 18px;border:1px solid var(--orange);
+    color:var(--orange-d);background:#f6e7de;border-radius:30px;letter-spacing:.5px;}
+
+  .sectitle{color:var(--orange);font-weight:800;font-size:clamp(20px,2.6vw,34px);
+    border-top:3px solid var(--orange);padding-top:10px;margin-bottom:6px;letter-spacing:.5px;}
+  .sectitle .lv{display:block;font-size:clamp(10px,1.1vw,13px);color:#b98a5a;
+    letter-spacing:3px;font-weight:700;margin-bottom:2px;}
+
+  .cards{display:grid;gap:16px;margin-top:22px;}
+  .cards.c2{grid-template-columns:1fr 1fr;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 22px;display:flex;gap:16px;align-items:flex-start;
+    box-shadow:0 6px 22px rgba(120,90,60,.07);}
+  .card .ic{font-size:clamp(26px,2.8vw,38px);line-height:1;flex:0 0 auto;}
+  .card .body{flex:1;min-width:0;}
+  .card .nm{font-size:clamp(17px,1.8vw,25px);font-weight:800;color:#2a2620;}
+  .card .en{font-size:clamp(10px,1vw,13px);color:#9b8e76;font-family:"SF Mono",Menlo,monospace;margin-top:1px;}
+  .card .ds{margin-top:7px;font-size:clamp(13px,1.4vw,18px);color:var(--ink);line-height:1.55;}
+  .card .ds b{color:var(--orange-d);}
+  .card .ex{margin-top:7px;font-size:clamp(12px,1.3vw,16px);color:#7a4a2e;
+    background:#f4ece0;border-left:3px solid var(--orange);border-radius:6px;padding:6px 11px;}
+
+  .steps{margin-top:24px;display:flex;flex-direction:column;gap:18px;}
+  .step{display:flex;gap:18px;align-items:center;}
+  .step .n{flex:0 0 52px;height:52px;border-radius:50%;background:var(--orange);color:#fff;
+    font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(193,95,60,.3);}
+  .step .t{font-size:clamp(16px,1.9vw,26px);color:var(--ink);}
+  .step .t b{color:var(--orange-d);}
+  code{font-family:"SF Mono",Menlo,monospace;background:#efe9dd;color:#9b4a2c;
+    padding:2px 9px;border-radius:6px;font-size:.86em;}
+
+  .ghwrap{position:relative;margin:14px auto 0;max-width:88%;border:1px solid var(--line);
+    border-radius:13px;overflow:hidden;box-shadow:0 12px 34px rgba(120,90,60,.14);}
+  .ghwrap img{width:100%;display:block;}
+  .ring{position:absolute;width:108px;height:46px;border:3.5px solid var(--orange);border-radius:30px;
+    transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(193,95,60,.18);animation:ringpulse 1.4s infinite;}
+  @keyframes ringpulse{0%,100%{box-shadow:0 0 0 5px rgba(193,95,60,.18);}50%{box-shadow:0 0 0 11px rgba(193,95,60,.06);}}
+  .point{position:absolute;transform:translate(-50%,-260%);background:var(--orange);color:#fff;
+    padding:6px 14px;border-radius:9px;font-weight:800;font-size:clamp(13px,1.4vw,18px);white-space:nowrap;
+    box-shadow:0 6px 16px rgba(193,95,60,.4);}
+  .point::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:var(--orange);}
+  .cap{margin-top:12px;font-size:clamp(13px,1.4vw,18px);color:var(--ink2);text-align:center;}
+  .cap b{color:var(--orange-d);}
+  .slide.active .anim{opacity:0;transform:translateY(26px);
+    animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .slide.active .anim:nth-child(1){animation-delay:.05s;}
+  .slide.active .anim:nth-child(2){animation-delay:.16s;}
+  .slide.active .anim:nth-child(3){animation-delay:.27s;}
+  .slide.active .anim:nth-child(4){animation-delay:.38s;}
+  .slide.active .anim:nth-child(5){animation-delay:.49s;}
+  .slide.active .anim:nth-child(6){animation-delay:.60s;}
+
+  .nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:8px;}
+  .nav .d{width:9px;height:9px;border-radius:50%;background:#dac9b3;cursor:pointer;transition:.2s;}
+  .nav .d.on{background:var(--orange);width:26px;border-radius:6px;}
+  .hint{position:fixed;bottom:24px;right:26px;color:#a99a83;font-size:13px;z-index:10;}
+  .pg{position:fixed;top:24px;right:28px;color:#b0a48d;font-size:15px;letter-spacing:2px;z-index:10;}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="bar"></div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">9</span></div>
+
+<!-- 1 封面 -->
+<section class="slide active">
+  <div class="kicker anim"><span class="dot"></span>BEXS AI 學院 · 會員專屬</div>
+  <h1 class="serif anim">給你的 AI<br>裝上「<span class="hl">超能力</span>」</h1>
+  <div class="sub anim">12 個技能　·　<b>不用懂程式</b>　·　<b>不用付費帳號</b>　·　裝了馬上用</div>
+  <div class="foot anim">
+    <span class="chip">每天都用得到</span><span class="chip">新手友善</span>
+    <span class="chip">資料不外流</span><span class="chip">講一句就會做</span>
+  </div>
+</section>
+
+<!-- 2 概覽 -->
+<section class="slide">
+  <div class="kicker anim"><span class="dot"></span>這包裡面有什麼</div>
+  <h2 class="anim">三大類 · <span class="hl">12 個技能</span></h2>
+  <div class="cards c2 anim" style="margin-top:26px">
+    <div class="card"><div class="ic">🌟</div><div class="body"><div class="nm">每天用得到（7）</div><div class="ds">文件 · 表格 · 檔案 · PDF · 圖片 · 摘要 · 寫作</div></div></div>
+    <div class="card"><div class="ic">🎬</div><div class="body"><div class="nm">創作好用（2）</div><div class="ds">媒體下載 · 提示詞翻譯</div></div></div>
+    <div class="card"><div class="ic">🎨</div><div class="body"><div class="nm">設計類（3）</div><div class="ds">視覺設計 · UIUX 設計庫 · 品牌規範</div></div></div>
+    <div class="card"><div class="ic">🔜</div><div class="body"><div class="nm">進階（之後開放）</div><div class="ds">YouTube 學習 · 切短片 · 聲音克隆…</div></div></div>
+  </div>
+</section>
+
+<!-- 3 每天用 part1 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">PART 1 · 1/2</span>每天都用得到</div>
+  <div class="cards c2 anim" style="margin-top:14px">
+    <div class="card"><div class="ic">📑</div><div class="body"><div class="nm">文件製作</div><div class="en">document-maker</div><div class="ds">用講的做出 <b>Word/Excel/簡報/PDF</b>，Excel 自動帶公式。</div></div></div>
+    <div class="card"><div class="ic">📊</div><div class="body"><div class="nm">表格分析</div><div class="en">data-analyzer</div><div class="ds">丟 Excel/CSV，直接問：<b>誰最高、幫我畫圖</b>。</div></div></div>
+    <div class="card"><div class="ic">📁</div><div class="body"><div class="nm">檔案整理</div><div class="en">file-organizer</div><div class="ds">亂掉的下載/桌面自動分類，<b>只搬不刪</b>。</div></div></div>
+    <div class="card"><div class="ic">📄</div><div class="body"><div class="nm">PDF 工具</div><div class="en">pdf-toolkit</div><div class="ds">合併、拆開、抽頁、轉文字、<b>壓縮變小</b>。</div></div></div>
+  </div>
+</section>
+
+<!-- 4 每天用 part2 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">PART 1 · 2/2</span>每天都用得到</div>
+  <div class="cards anim" style="margin-top:14px">
+    <div class="card"><div class="ic">🖼️</div><div class="body"><div class="nm">圖片工具</div><div class="en">image-toolkit</div><div class="ds">一批圖一次 <b>縮小 / 壓縮 / 轉檔 / 加浮水印</b>。</div></div></div>
+    <div class="card"><div class="ic">📰</div><div class="body"><div class="nm">網頁摘要</div><div class="en">web-summarizer</div><div class="ds">丟一個網址或長文，<b>30 秒給你重點</b>。</div></div></div>
+    <div class="card"><div class="ic">✍️</div><div class="body"><div class="nm">寫作助手</div><div class="en">writing-assistant</div><div class="ds">寫 / 改 email、貼文，還能 <b>「去掉 AI 味」</b>。</div></div></div>
+  </div>
+</section>
+
+<!-- 5 創作 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">PART 2</span>創作 · 內容好用</div>
+  <div class="cards anim" style="margin-top:14px">
+    <div class="card"><div class="ic">⬇️</div><div class="body"><div class="nm">媒體下載</div><div class="en">media-grabber</div><div class="ds">下載 <b>YouTube / TikTok / IG</b> 影片，或只抓 mp3 音檔。</div></div></div>
+    <div class="card"><div class="ic">🌐</div><div class="body"><div class="nm">提示詞翻譯</div><div class="en">prompt-translator</div><div class="ds">打中文 → 出 <b>道地英文生圖提示詞</b>（餵 Midjourney 等）。</div></div></div>
+  </div>
+</section>
+
+<!-- 6 設計 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">PART 3</span>設計 · 視覺</div>
+  <div class="cards anim" style="margin-top:14px">
+    <div class="card"><div class="ic">🎨</div><div class="body"><div class="nm">視覺設計</div><div class="en">canvas-design</div><div class="ds">做 <b>海報、圖卡、視覺藝術</b>（輸出 PNG/PDF）。</div></div></div>
+    <div class="card"><div class="ic">🧩</div><div class="body"><div class="nm">UIUX 設計庫</div><div class="en">ui-ux-pro-max</div><div class="ds">配色、字體、版型、元件範例的 <b>設計智庫</b>。</div></div></div>
+    <div class="card"><div class="ic">🏷️</div><div class="body"><div class="nm">品牌規範</div><div class="en">brand-guidelines</div><div class="ds">把 <b>品牌色 / 字體</b> 統一套到文件 / 簡報。</div></div></div>
+  </div>
+</section>
+
+<!-- 下載 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">下載</span>從哪裡下載技能包?</div>
+  <div class="ghwrap anim">
+    <img src="assets/github_download.png" alt="GitHub 下載">
+    <div class="ring" style="left:66%;top:27%"></div>
+  </div>
+  <div class="cap anim">👉 進 GitHub 頁，點右上角綠色 <b>Code</b> 按鈕（圈起來那個）→ 下拉選 <b>Download ZIP</b> → 解壓縮，再照下一頁安裝。</div>
+</section>
+
+<!-- 7 安裝 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">安裝</span>3 步驟 · 新手照做</div>
+  <div class="steps">
+    <div class="step anim"><div class="n">1</div><div class="t">下載這個包：GitHub 右上角 <b>Code → Download ZIP</b></div></div>
+    <div class="step anim"><div class="n">2</div><div class="t">一鍵全裝：<code>for d in skills/*/*/; do cp -r "$d" ~/.claude/skills/; done</code></div></div>
+    <div class="step anim"><div class="n">3</div><div class="t">重開 Claude Code → <b>用講的就會觸發</b></div></div>
+  </div>
+</section>
+
+<!-- 8 怎麼用 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">怎麼用</span>不用記指令 · 直接「用講的」</div>
+  <div class="cards c2 anim" style="margin-top:16px">
+    <div class="card"><div class="ic">🌐</div><div class="body"><div class="nm">提示詞翻譯</div><div class="ex">「咖啡廳看書的女生、陽光、電影感 → 翻成英文提示詞」</div></div></div>
+    <div class="card"><div class="ic">⬇️</div><div class="body"><div class="nm">媒體下載</div><div class="ex">貼連結 +「下載這支影片」或「只要 mp3」</div></div></div>
+    <div class="card"><div class="ic">📊</div><div class="body"><div class="nm">表格分析</div><div class="ex">「分析這個 sales.csv，哪個月賣最好？畫長條圖」</div></div></div>
+    <div class="card"><div class="ic">📑</div><div class="body"><div class="nm">文件製作</div><div class="ex">「把這些數字做成 Excel，要有合計公式」</div></div></div>
+  </div>
+  <div class="sub anim" style="margin-top:16px;font-size:clamp(13px,1.5vw,20px)">🔁 不用說「用某某技能」—— 講你要的結果，它看懂就自動用對的技能。</div>
+</section>
+
+<!-- 9 結尾 -->
+<section class="slide" style="align-items:center;text-align:center">
+  <div class="kicker anim" style="justify-content:center"><span class="dot"></span>開始吧</div>
+  <h1 class="serif anim">先從「<span class="hl">每天用得到</span>」<br>那幾個開始</h1>
+  <div class="sub anim">熟了再加 —— 別一次全開來亂試。</div>
+  <div class="foot anim" style="justify-content:center"><span class="chip">BEXS AI 學院</span><span class="chip">會員 / 學生專用</span></div>
+</section>
+
+<div class="nav" id="nav"></div>
+<div class="hint">← → 翻頁 · 點圓點跳頁</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const nav=document.getElementById('nav');let i=0;
+  document.getElementById('tot').textContent=slides.length;
+  slides.forEach((_,k)=>{const d=document.createElement('div');d.className='d'+(k===0?' on':'');d.onclick=()=>go(k);nav.appendChild(d);});
+  const dots=[...nav.children];
+  function go(n){if(n<0||n>=slides.length)return;
+    slides[i].classList.remove('active');dots[i].classList.remove('on');
+    i=n;slides[i].classList.add('active');dots[i].classList.add('on');
+    document.getElementById('cur').textContent=i+1;}
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(i+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);});
+  document.addEventListener('click',e=>{if(!e.target.closest('.nav'))go(i+1);});
+</script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEXS AI 學院 · 新手指南</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{--paper:#faf6ee;--ink:#332f28;--ink2:#5b554b;--line:#e3dccf;
+    --orange:#c15f3c;--orange-d:#9b4a2c;--card:#fdfaf3;--tip:#f6eccf;--tip-line:#d8c178;
+    --ok:#e2efdc;--ok-line:#9cc587;--warn:#f6ddd2;--warn-line:#dd9a7c;}
+  html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink);
+    font-family:"PingFang TC","Heiti TC",-apple-system,sans-serif;}
+  .serif{font-family:Georgia,"Songti TC","PingFang TC",serif;}
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+    background:radial-gradient(circle at 20% 15%,rgba(193,95,60,.05),transparent 40%),
+      radial-gradient(circle at 85% 85%,rgba(193,95,60,.04),transparent 45%);}
+  .slide{position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;padding:6.5vh 9vw;z-index:3;}
+  .slide.active{display:flex;}
+  .bar{position:fixed;left:0;top:0;bottom:0;width:12px;z-index:5;background:linear-gradient(180deg,#c15f3c,#a84e30);}
+  .kicker{color:var(--orange);letter-spacing:5px;font-size:clamp(13px,1.5vw,20px);font-weight:700;
+    margin-bottom:14px;display:inline-flex;align-items:center;gap:11px;}
+  .kicker .dot{width:10px;height:10px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+  h1{font-size:clamp(36px,5.6vw,78px);line-height:1.12;color:#2a2620;font-weight:800;letter-spacing:1px;}
+  h1 .hl{color:var(--orange);}
+  .sub{margin-top:14px;font-size:clamp(15px,1.9vw,26px);color:var(--ink2);}
+  .sub b{color:var(--orange);}
+  .foot{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{font-size:clamp(12px,1.3vw,18px);padding:8px 18px;border:1px solid var(--orange);
+    color:var(--orange-d);background:#f6e7de;border-radius:30px;}
+  .sectitle{color:var(--orange);font-weight:800;font-size:clamp(20px,2.6vw,34px);
+    border-top:3px solid var(--orange);padding-top:9px;margin-bottom:4px;}
+  .sectitle .lv{display:block;font-size:clamp(10px,1.1vw,13px);color:#b98a5a;letter-spacing:3px;font-weight:700;margin-bottom:2px;}
+  .cards{display:grid;gap:14px;margin-top:18px;}
+  .cards.c2{grid-template-columns:1fr 1fr;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px 20px;
+    box-shadow:0 6px 22px rgba(120,90,60,.07);}
+  .card.flex{display:flex;gap:14px;align-items:flex-start;}
+  .card .ic{font-size:clamp(24px,2.6vw,34px);line-height:1;flex:0 0 auto;}
+  .card .nm{font-size:clamp(16px,1.7vw,23px);font-weight:800;color:#2a2620;}
+  .card .nm small{font-size:.6em;color:#9b8e76;font-weight:600;font-family:"SF Mono",Menlo,monospace;}
+  .card .ds{margin-top:5px;font-size:clamp(12px,1.35vw,17px);color:var(--ink);line-height:1.5;}
+  .card .ds b{color:var(--orange-d);}
+  .steps{margin-top:18px;display:flex;flex-direction:column;gap:14px;}
+  .step{display:flex;gap:16px;align-items:center;}
+  .step .n{flex:0 0 46px;height:46px;border-radius:50%;background:var(--orange);color:#fff;
+    font-weight:800;font-size:21px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(193,95,60,.3);}
+  .step .t{font-size:clamp(15px,1.7vw,23px);color:var(--ink);}
+  .step .t b{color:var(--orange-d);}
+  .mis{display:flex;gap:13px;align-items:flex-start;background:var(--warn);border-left:4px solid var(--warn-line);
+    border-radius:9px;padding:12px 16px;margin-top:0;}
+  .mis .x{font-size:1.3em;flex:0 0 auto;}
+  .mis b{color:#a8401f;}
+  code{font-family:"SF Mono",Menlo,monospace;background:#efe9dd;color:#9b4a2c;padding:2px 8px;border-radius:5px;font-size:.85em;}
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:18px;align-items:start;}
+  .shot a{display:block;border:1px solid var(--line);border-radius:13px;overflow:hidden;
+    background:var(--card);box-shadow:0 8px 24px rgba(120,90,60,.12);transition:transform .15s;text-decoration:none;}
+  .shot a:hover{transform:translateY(-3px);}
+  .shot img{width:100%;height:auto;display:block;}
+  .shot .lb{padding:11px 16px;font-weight:800;color:#2a2620;font-size:clamp(15px,1.6vw,21px);border-top:1px solid var(--line);}
+  .shot .lb small{color:#9b8e76;font-weight:600;font-size:.7em;margin-left:6px;}
+  .shot .lb .go{float:right;color:var(--orange);font-size:.72em;font-weight:700;}
+  .bigshot{margin-top:14px;display:flex;justify-content:center;}
+  .bigshot a{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 14px 38px rgba(120,90,60,.14);text-decoration:none;}
+  .bigshot img{max-width:100%;max-height:56vh;display:block;}
+  .cap{margin-top:13px;font-size:clamp(13px,1.4vw,18px);color:var(--ink2);}
+  .cap b{color:var(--orange-d);}
+  .ghwrap{position:relative;margin:14px auto 0;max-width:90%;border:1px solid var(--line);
+    border-radius:13px;overflow:hidden;box-shadow:0 12px 34px rgba(120,90,60,.14);}
+  .ghwrap img{width:100%;display:block;}
+  .ring{position:absolute;width:108px;height:46px;border:3.5px solid var(--orange);border-radius:30px;
+    transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(193,95,60,.18);animation:ringpulse 1.4s infinite;}
+  @keyframes ringpulse{0%,100%{box-shadow:0 0 0 5px rgba(193,95,60,.18);}50%{box-shadow:0 0 0 11px rgba(193,95,60,.06);}}
+  .point{position:absolute;transform:translate(-50%,-260%);background:var(--orange);color:#fff;
+    padding:6px 14px;border-radius:9px;font-weight:800;font-size:clamp(13px,1.4vw,18px);white-space:nowrap;
+    box-shadow:0 6px 16px rgba(193,95,60,.4);}
+  .point::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:var(--orange);}
+  .slide.active .anim{opacity:0;transform:translateY(24px);animation:rise .65s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .slide.active .anim:nth-child(1){animation-delay:.05s;}.slide.active .anim:nth-child(2){animation-delay:.15s;}
+  .slide.active .anim:nth-child(3){animation-delay:.25s;}.slide.active .anim:nth-child(4){animation-delay:.35s;}
+  .slide.active .anim:nth-child(5){animation-delay:.45s;}.slide.active .anim:nth-child(6){animation-delay:.55s;}
+  .nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:8px;}
+  .nav .d{width:9px;height:9px;border-radius:50%;background:#dac9b3;cursor:pointer;transition:.2s;}
+  .nav .d.on{background:var(--orange);width:26px;border-radius:6px;}
+  .hint{position:fixed;bottom:24px;right:26px;color:#a99a83;font-size:13px;z-index:10;}
+  .pg{position:fixed;top:24px;right:28px;color:#b0a48d;font-size:15px;letter-spacing:2px;z-index:10;}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="bar"></div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">0</span></div>
+
+<!-- 1 封面 -->
+<section class="slide active">
+  <div class="kicker anim"><span class="dot"></span>BEXS AI 學院 · 完全新手</div>
+  <h1 class="serif anim">第一次用 AI?<br><span class="hl">這份就夠了</span></h1>
+  <div class="sub anim">上手步驟　·　工具科普　·　常見誤區 —— 全部白話、零基礎</div>
+  <div class="foot anim"><span class="chip">不用懂程式</span><span class="chip">10 分鐘看懂</span><span class="chip">少走冤枉路</span></div>
+</section>
+
+<!-- Claude 介面 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">第一個要用的</span>Claude 網頁版長這樣</div>
+  <div class="bigshot anim"><a href="https://claude.com" target="_blank"><img src="assets/claude.png" alt="claude.com"></a></div>
+  <div class="cap anim">👉 上 <b>claude.com</b>，用 Google 或 email 登入就能用。<b>打字聊天</b>就能叫它做事 —— 這是你第一步要熟的地方。</div>
+</section>
+
+<!-- 2 三步上手 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">START</span>完全新手 · 3 步上手</div>
+  <div class="steps">
+    <div class="step anim"><div class="n">1</div><div class="t"><b>先用網頁版</b>：上 <code>claude.ai</code>，不用裝任何東西，打字就能用。</div></div>
+    <div class="step anim"><div class="n">2</div><div class="t"><b>把事情講清楚</b>：給它「<b>給什麼 + 要什麼 + 什麼格式</b>」。例：「這份 PDF 幫我整理成 5 個重點」。</div></div>
+    <div class="step anim"><div class="n">3</div><div class="t"><b>想讓 AI 真的動手</b>（改檔案、跑程式、自動化）→ 再進階到 <b>Claude Code</b> + 技能包。</div></div>
+  </div>
+  <div class="card anim" style="margin-top:18px"><div class="ds">💡 <b>一句話</b>：先把網頁版玩熟（會「講清楚需求」），再談進階。九成的人卡關都是太急著裝工具。</div></div>
+</section>
+
+<!-- 3 工具科普 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">工具科普</span>這幾個到底差在哪?</div>
+  <div class="cards c2 anim" style="margin-top:14px">
+    <div class="card flex"><div class="ic">⚙️</div><div><div class="nm">Ollama <small>引擎</small></div><div class="ds">一個指令，把<b>開源 AI 模型</b>（Llama / Qwen）裝到你電腦上跑。本地、免費、私密。</div></div></div>
+    <div class="card flex"><div class="ic">🤖</div><div><div class="nm">Hermes <small>本地助理</small></div><div class="ds">開源助理框架（Nous Research）。<b>會自己寫技能、記得你、能用工具做事</b>，可接 Ollama 跑本地 $0。</div></div></div>
+    <div class="card flex"><div class="ic">🦞</div><div><div class="nm">OpenClaw <small>本地 agent</small></div><div class="ds">開源本地 agent。接到 <b>LINE / Telegram</b> 等聊天軟體，自動跑多步任務，模型雲端本地隨你選。</div></div></div>
+    <div class="card flex"><div class="ic">💻</div><div><div class="nm">Cursor <small>寫程式</small></div><div class="ds">AI <b>程式編輯器</b>。用雲端最強模型幫你寫程式、改 code。給有在寫程式的人。</div></div></div>
+  </div>
+</section>
+
+<!-- 工具介面 1 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">介面長這樣 · 1/2</span>它們打開長什麼樣?（可點圖進官網）</div>
+  <div class="shots anim">
+    <div class="shot"><a href="https://cursor.com" target="_blank"><img src="assets/cursor.png" alt="Cursor"><div class="lb">Cursor <small>AI 程式編輯器</small><span class="go">cursor.com ↗</span></div></a></div>
+    <div class="shot"><a href="https://ollama.com" target="_blank"><img src="assets/ollama.png" alt="Ollama"><div class="lb">Ollama <small>本地模型引擎</small><span class="go">ollama.com ↗</span></div></a></div>
+  </div>
+</section>
+
+<!-- 工具介面 2 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">介面長這樣 · 2/2</span>它們打開長什麼樣?（可點圖進 GitHub）</div>
+  <div class="shots anim">
+    <div class="shot"><a href="https://github.com/NousResearch/hermes-agent" target="_blank"><img src="assets/hermes.png" alt="Hermes"><div class="lb">Hermes <small>本地助理框架</small><span class="go">GitHub ↗</span></div></a></div>
+    <div class="shot"><a href="https://github.com/openclaw/openclaw" target="_blank"><img src="assets/openclaw.png" alt="OpenClaw"><div class="lb">OpenClaw <small>本地 agent</small><span class="go">GitHub ↗</span></div></a></div>
+  </div>
+</section>
+
+<!-- 4 它們的關係 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">關係圖</span>一句話看懂它們的關係</div>
+  <div class="cards anim" style="margin-top:16px">
+    <div class="card"><div class="ds">⚙️ <b>Ollama＝引擎</b>：負責「跑模型」。本身不會做事，是給別人用的動力。</div></div>
+    <div class="card"><div class="ds">🤖🦞 <b>Hermes / OpenClaw＝會做事的助理</b>：拿引擎（或雲端模型）+ 工具，去幫你完成任務、自動化。</div></div>
+    <div class="card"><div class="ds">💻 <b>Cursor＝專門寫程式的編輯器</b>：跟上面不同路，是寫 code 的人在用。</div></div>
+  </div>
+  <div class="card anim" style="margin-top:14px"><div class="ds">🎯 <b>新手怎麼選</b>：日常用事 → 先 <b>Claude 網頁版</b>；想私密/免費/離線 → <b>Hermes 或 OpenClaw + Ollama</b>；寫程式 → <b>Cursor / Claude Code</b>。</div></div>
+</section>
+
+<!-- 5 LLM 科普 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">LLM 科普</span>「大語言模型」是什麼?</div>
+  <div class="card anim" style="margin-top:14px"><div class="ds">🧠 <b>LLM（大語言模型）</b>＝讀過海量文字、會聽人話、會生成文字的 AI。你用打字叫它做事，它用文字/表格/程式回你。Claude、GPT 都是 LLM。</div></div>
+  <div class="cards c2 anim" style="margin-top:14px">
+    <div class="card flex"><div class="ic">🟣</div><div><div class="nm">Claude <small>Anthropic</small></div><div class="ds">擅長寫作、推理、寫程式、長文。</div></div></div>
+    <div class="card flex"><div class="ic">🟢</div><div><div class="nm">GPT <small>OpenAI</small></div><div class="ds">通用、生態最大。</div></div></div>
+    <div class="card flex"><div class="ic">🔵</div><div><div class="nm">Gemini <small>Google</small></div><div class="ds">多模態、整合 Google。</div></div></div>
+    <div class="card flex"><div class="ic">🟠</div><div><div class="nm">Qwen / Llama <small>開源</small></div><div class="ds">可下載自己電腦跑（Qwen＝阿里、Llama＝Meta）。</div></div></div>
+  </div>
+</section>
+
+<!-- 6 雲端 vs 本地 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">關鍵觀念</span>雲端 vs 本地 · 開源 vs 閉源</div>
+  <div class="cards c2 anim" style="margin-top:16px">
+    <div class="card"><div class="nm">☁️ 雲端模型</div><div class="ds">Claude / GPT / Gemini。<b>最強最聰明</b>，但要<b>網路 + 花錢</b>，資料上傳到對方伺服器。</div></div>
+    <div class="card"><div class="nm">🏠 本地模型</div><div class="ds">Qwen / Llama 跑自己電腦。<b>免費、私密、離線</b>，但比雲端<b>弱、慢、吃硬體</b>。</div></div>
+    <div class="card"><div class="nm">🔓 開源</div><div class="ds">可下載自己跑、自己改（Qwen / Llama）。</div></div>
+    <div class="card"><div class="nm">🔒 閉源</div><div class="ds">只能用它的服務、下載不了（Claude / GPT）。</div></div>
+  </div>
+  <div class="card anim" style="margin-top:14px"><div class="ds">💡 <b>參數量（B＝十億）</b>：數字越大通常越聰明，但越慢越吃記憶體。80B 比 7B 強，但也重很多。</div></div>
+</section>
+
+<!-- API -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">API</span>「API」是什麼？三種付錢用 AI 的方式</div>
+  <div class="card anim" style="margin-top:14px"><div class="ds">🔑 <b>API key</b>＝一把「鑰匙」，讓<b>程式 / 工具</b>能去用 AI 的服務（Cursor、Hermes 接雲端模型都要它）。按「<b>用多少付多少</b>」計費。</div></div>
+  <div class="cards anim" style="margin-top:14px">
+    <div class="card flex"><div class="ic">📱</div><div><div class="nm">① 訂閱版 <small>最簡單</small></div><div class="ds">claude.ai Pro：<b>月費吃到飽</b>，網頁直接用。<b>新手就用這個</b>。</div></div></div>
+    <div class="card flex"><div class="ic">🔑</div><div><div class="nm">② API <small>進階</small></div><div class="ds">按<b>用量</b>付費，給工具 / 程式串接用。用越多付越多，要接自動化才需要。</div></div></div>
+    <div class="card flex"><div class="ic">🏠</div><div><div class="nm">③ 本地 <small>免費</small></div><div class="ds">Ollama 跑自己電腦：<b>免費、不用 API、不用網路</b>，但模型較弱。</div></div></div>
+  </div>
+  <div class="card anim" style="margin-top:13px"><div class="ds">🎯 <b>老師建議</b>：新手先用 <b>① 訂閱版網頁</b>，別一開始就碰 API。等你要接工具自動化、或想省錢跑大量，再學 API / 本地。</div></div>
+</section>
+
+<!-- 7 誤區 part1 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">避雷 · 1/2</span>新手最常踩的誤區</div>
+  <div class="cards anim" style="margin-top:16px">
+    <div class="mis anim"><div class="x">❌</div><div><b>以為要會寫程式</b> —— 不用!打字講人話就行,跟請一個助理一樣。</div></div>
+    <div class="mis anim"><div class="x">❌</div><div><b>一開始就裝一堆工具/技能</b> —— 貪多嚼不爛。先把網頁版玩熟,再進階。</div></div>
+    <div class="mis anim"><div class="x">❌</div><div><b>需求講太模糊</b> —— 「幫我弄一下」AI 會猜錯。要講「給什麼、要什麼、多長」。</div></div>
+  </div>
+</section>
+
+<!-- 8 誤區 part2 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">避雷 · 2/2</span>新手最常踩的誤區</div>
+  <div class="cards anim" style="margin-top:16px">
+    <div class="mis anim"><div class="x">❌</div><div><b>全盤相信 AI 給的數字/事實</b> —— 重要的(價格、新聞、數據)要它<b>附來源</b>、自己核對。AI 會「自信地講錯」。</div></div>
+    <div class="mis anim"><div class="x">❌</div><div><b>用本地小模型,期待 Claude 等級</b> —— 本地省錢私密但較弱,別期待一樣聰明。</div></div>
+    <div class="mis anim"><div class="x">❌</div><div><b>雞毛蒜皮也丟最貴的模型</b> —— 大砲打小鳥。簡單事用便宜/本地的就好,省錢。</div></div>
+  </div>
+</section>
+
+<!-- 老師的話 -->
+<section class="slide">
+  <div class="sectitle anim"><span class="lv">老師的話</span>Rick 想跟你說</div>
+  <div class="cards anim" style="margin-top:16px">
+    <div class="card"><div class="ds">👨‍🏫 <b>你不用會寫程式。</b>我教的這些，照著做就會 —— 怕的不是「不會」，是「不開始」。先動手玩，玩錯也沒關係。</div></div>
+    <div class="card"><div class="ds">🐢 <b>慢慢來。</b>一個工具用熟，勝過一次裝十個。我帶你少走冤枉路，但路還是你自己走。</div></div>
+    <div class="card"><div class="ds">🚀 <b>AI 是放大器。</b>它讓「知道自己要什麼」的人變超強。所以先想清楚你要什麼，再叫它做。</div></div>
+    <div class="card"><div class="ds">🙋 <b>有問題就問，別自己卡死。</b>卡關是正常的，問了就過 —— 我在。</div></div>
+  </div>
+</section>
+
+<!-- 9 結尾 -->
+<section class="slide" style="align-items:center;text-align:center">
+  <div class="kicker anim" style="justify-content:center"><span class="dot"></span>新手路線</div>
+  <h1 class="serif anim">網頁版玩熟 → <span class="hl">進階技能包</span></h1>
+  <div class="sub anim">先會「講清楚需求」,再加工具。慢慢來,你會變高手。</div>
+  <div class="foot anim" style="justify-content:center"><span class="chip">BEXS AI 學院</span><span class="chip">會員 / 學生專用</span></div>
+</section>
+
+<div class="nav" id="nav"></div>
+<div class="hint">← → 翻頁 · 點圓點跳頁</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];const nav=document.getElementById('nav');let i=0;
+  document.getElementById('tot').textContent=slides.length;
+  slides.forEach((_,k)=>{const d=document.createElement('div');d.className='d'+(k===0?' on':'');d.onclick=()=>go(k);nav.appendChild(d);});
+  const dots=[...nav.children];
+  function go(n){if(n<0||n>=slides.length)return;slides[i].classList.remove('active');dots[i].classList.remove('on');
+    i=n;slides[i].classList.add('active');dots[i].classList.add('on');document.getElementById('cur').textContent=i+1;}
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(i+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);});
+  document.addEventListener('click',e=>{if(!e.target.closest('.nav'))go(i+1);});
+</script>
+</body>
+</html>

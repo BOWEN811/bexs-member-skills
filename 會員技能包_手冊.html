@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page{ size:A4; margin:15mm 0; }
+  *{ margin:0; padding:0; box-sizing:border-box;
+     -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  :root{ --paper:#faf6ee; --ink:#332f28; --ink2:#5b554b; --line:#e3dccf;
+    --orange:#c15f3c; --brand:#efe7d6; --brand2:#e7dcc6; --tip:#f6eccf; --tip-line:#d8c178;
+    --ok:#e2efdc; --ok-line:#9cc587; }
+  html,body{ background:var(--paper); color:var(--ink);
+    font-family:"PingFang TC","Heiti TC",-apple-system,sans-serif; font-size:11.2pt; line-height:1.7; }
+  .serif{ font-family:Georgia,"Songti TC","PingFang TC",serif; }
+  .sheet{ padding:0 17mm; }
+  p{ margin:6px 0; } strong{ color:#241f18; }
+  code{ font-family:"SF Mono",Menlo,monospace; background:#efe9dd; color:#9b4a2c;
+    padding:1px 6px; border-radius:5px; font-size:.86em; }
+
+  /* 封面 */
+  .cover{ height:262mm; display:flex; flex-direction:column; justify-content:center;
+    padding:0 22mm; position:relative; page-break-after:always; }
+  .cover .bar{ position:absolute; left:0; top:0; bottom:0; width:14mm;
+    background:linear-gradient(180deg,#c15f3c,#a84e30); }
+  .cover .kick{ color:var(--orange); letter-spacing:5px; font-size:13pt; font-weight:700; margin-bottom:18px; }
+  .cover h1{ font-size:42pt; line-height:1.12; color:#2a2620; font-weight:800; letter-spacing:1px; }
+  .cover h1 .hl{ color:var(--orange); }
+  .cover .sub{ margin-top:18px; font-size:16pt; color:var(--ink2); }
+  .cover .meta{ margin-top:32px; display:flex; gap:10px; flex-wrap:wrap; }
+  .cover .chip{ border:1px solid var(--orange); color:#9b4a2c; background:#f6e7de;
+    border-radius:30px; padding:7px 16px; font-size:10.5pt; }
+  .cover .foot{ position:absolute; bottom:24mm; left:22mm; color:var(--ink2); font-size:10pt; }
+
+  h2.layer{ font-size:19pt; color:var(--orange); font-weight:800; margin:24px 0 4px;
+    padding-top:9px; border-top:2.5px solid var(--orange); letter-spacing:.5px; break-after:avoid; }
+  h2.layer .lv{ font-size:10.5pt; color:#b98a5a; display:block; font-weight:700; letter-spacing:2px; margin-bottom:2px; }
+
+  .note{ border-left:4px solid #cbb487; background:var(--brand);
+    padding:11px 15px; border-radius:8px; margin:11px 0; break-inside:avoid; }
+  .note.tip{ background:var(--tip); border-left-color:var(--tip-line); }
+  .note.ok{ background:var(--ok); border-left-color:var(--ok-line); }
+
+  /* 技能卡 */
+  .skill{ border:1px solid var(--line); border-radius:11px; padding:13px 16px; margin:11px 0;
+    background:#fdfaf3; break-inside:avoid; }
+  .skill .hd{ display:flex; align-items:center; gap:11px; }
+  .skill .ic{ font-size:22pt; line-height:1; }
+  .skill .nm{ font-size:14pt; font-weight:800; color:#2a2620; }
+  .skill .en{ font-size:9.5pt; color:#9b8e76; font-family:"SF Mono",Menlo,monospace; }
+  .skill .ds{ margin:7px 0 6px; color:var(--ink); }
+  .skill .row{ display:flex; gap:8px; margin-top:5px; font-size:10pt; }
+  .skill .row .lbl{ flex:0 0 64px; color:var(--orange); font-weight:700; }
+  .skill .row .val{ flex:1; color:var(--ink2); }
+  .skill .ex{ color:#7a4a2e; }
+
+  .cols{ display:flex; gap:13px; margin:11px 0; break-inside:avoid; }
+  .cols>div{ flex:1; }
+  pre{ background:#2c2722; color:#f0e9dc; padding:12px 15px; border-radius:9px; margin:10px 0;
+    font-family:"SF Mono",Menlo,monospace; font-size:9.4pt; line-height:1.55; white-space:pre-wrap; break-inside:avoid; }
+  .end{ text-align:center; padding:34px 20px; }
+  .end .big{ font-size:15pt; color:var(--orange); font-weight:800; }
+  .small{ font-size:9pt; color:var(--ink2); }
+  .secthead{ font-size:12pt; color:#7a4a2e; font-weight:800; margin:16px 0 2px; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="bar"></div>
+  <div class="kick">BEXS · 會員專屬</div>
+  <h1 class="serif">BEXS<br>會員<span class="hl">技能包</span></h1>
+  <div class="sub">給你的 AI 裝上「超能力」　·　12 個技能</div>
+  <div class="meta">
+    <span class="chip">不用懂程式</span><span class="chip">不用付費帳號</span>
+    <span class="chip">新手友善</span><span class="chip">裝了馬上用</span>
+  </div>
+  <div class="foot">Rick Bowen · BEXS　|　每個技能 = 幫你的 AI 多會一件事</div>
+</section>
+
+<div class="sheet">
+
+<div class="note"><strong>🎯 這份手冊是什麼?</strong> 每一個「技能」就是幫你的 AI(Claude)多會一件事。不用懂程式、不用付費帳號 —— 照後面說明複製一個資料夾,你的 AI 就學會了。看不懂哪個幹嘛?每個都用白話寫了「這個幫你做什麼 + 怎麼用」。</div>
+
+<div class="cols">
+  <div class="note ok"><strong>🌟 每天都用得到(7)</strong><br>文件 · 表格 · 檔案 · PDF · 圖片 · 摘要 · 寫作</div>
+  <div class="note tip"><strong>🎬 創作(2) · 🎨 設計(3)</strong><br>媒體下載 · 提示詞翻譯 · 視覺設計 · UIUX · 品牌規範</div>
+</div>
+
+<h2 class="layer"><span class="lv">PART 1</span>每天都用得到(零依賴 · 新手友善)</h2>
+
+<div class="skill"><div class="hd"><div class="ic">📑</div><div><div class="nm">文件製作</div><div class="en">document-maker</div></div></div>
+  <div class="ds">用講話的方式做出 <strong>Word / Excel / PowerPoint / PDF</strong>。Excel 會自動帶公式、PPT 會套版型,不用會 Office 操作。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「幫我把這三季數字做成 Excel,要有合計公式」/「做一份 8 頁產品簡報」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>文件製作-document-maker</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">📊</div><div><div class="nm">表格分析</div><div class="en">data-analyzer</div></div></div>
+  <div class="ds">丟一個 <strong>Excel / CSV</strong>,直接用問的:總和、平均、誰最高、什麼趨勢,還能畫圖表。不會樞紐分析、不會公式也能秒懂數據。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「分析這個 sales.csv,哪個月賣最好?畫成長條圖」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>表格分析-data-analyzer</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">📁</div><div><div class="nm">檔案整理</div><div class="en">file-organizer</div></div></div>
+  <div class="ds">把亂到爆的<strong>下載 / 桌面</strong>資料夾自動依類型或日期分類歸檔。<strong>只搬不刪</strong>、動手前先給你看清單。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「整理我的下載資料夾,依類型分」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>檔案整理-file-organizer</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">📄</div><div><div class="nm">PDF 工具</div><div class="en">pdf-toolkit</div></div></div>
+  <div class="ds">在你自己電腦上處理 PDF,<strong>不用裝軟體、不用上傳到可疑網站</strong>:合併、拆開、抽某幾頁、轉純文字、壓縮變小。原檔保留、只另存新檔。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「把這兩個 PDF 合併」/「這個 PDF 太大,壓縮一下」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>PDF工具-pdf-toolkit</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">🖼️</div><div><div class="nm">圖片工具</div><div class="en">image-toolkit</div></div></div>
+  <div class="ds">一次處理一堆圖:<strong>縮放尺寸、壓縮變小、轉格式(png/jpg/webp)、加文字浮水印</strong>。上傳前壓圖、整理相簿都用得到。原圖不動、結果另存。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「這個資料夾的圖全部縮到 1080 寬、轉成 jpg」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>圖片工具-image-toolkit</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">📰</div><div><div class="nm">網頁摘要</div><div class="en">web-summarizer</div></div></div>
+  <div class="ds">丟一個<strong>網址或長文</strong>,30 秒給你重點:一句話總結 → 3-5 個重點 → 關鍵數據。沒空看完長文時用。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">貼網址 +「這篇幫我抓重點」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>網頁摘要-web-summarizer</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">✍️</div><div><div class="nm">寫作助手</div><div class="en">writing-assistant</div></div></div>
+  <div class="ds">寫 / 改 <strong>email、訊息、貼文、文章</strong>,語氣你選,還能<strong>「去 AI 味」</strong>—— 拔掉破折號、罐頭句、重複結構這些一看就是 AI 的痕跡。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「幫我寫一封跟客戶延期的道歉信,語氣誠懇」/「這段去掉 AI 味」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>寫作助手-writing-assistant</code></div></div></div>
+
+<h2 class="layer"><span class="lv">PART 2</span>創作 / 內容好用</h2>
+
+<div class="skill"><div class="hd"><div class="ic">⬇️</div><div><div class="nm">媒體下載</div><div class="en">media-grabber</div></div></div>
+  <div class="ds">下載 <strong>YouTube / TikTok / Instagram / Facebook</strong> 的影片或音檔:可選畫質的 mp4、或只抓 mp3。離線看、留存教材、抽音檔都用得到。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">貼連結 +「下載這支影片」/「只要 mp3 音檔」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>媒體下載-media-grabber</code>(需 yt-dlp,會幫你裝)</div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">🌐</div><div><div class="nm">提示詞翻譯</div><div class="en">prompt-translator</div></div></div>
+  <div class="ds">打<strong>中文描述 → 出道地英文生圖提示詞</strong>(餵 Midjourney / Stable Diffusion / ComfyUI)。自動補風格、光線、構圖常用詞,不是死板直譯。給不懂英文但要用英文生圖工具的人。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「一個女生在窗邊咖啡廳看書、陽光灑進來、電影感 → 翻成英文提示詞」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>提示詞翻譯-prompt-translator</code></div></div></div>
+
+<h2 class="layer"><span class="lv">PART 3</span>設計 / 視覺</h2>
+
+<div class="skill"><div class="hd"><div class="ic">🎨</div><div><div class="nm">視覺設計</div><div class="en">canvas-design</div></div></div>
+  <div class="ds">用設計原則做<strong>海報、圖卡、視覺藝術</strong>(輸出 PNG / PDF)。沒有設計軟體也能做出像樣的視覺。原創設計、不抄襲。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「幫我做一張春節促銷海報,喜慶風」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>視覺設計-canvas-design</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">🧩</div><div><div class="nm">UIUX 設計庫</div><div class="en">ui-ux-pro-max</div></div></div>
+  <div class="ds">UI/UX 設計智庫:67 種風格、96 組配色、57 組字體搭配、版型與元件範例。做<strong>網頁 / 登陸頁 / 介面</strong>時給你專業的配色、排版、元件建議。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「我要做一個賣課程的登陸頁,給我配色 + 版型建議」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>UIUX設計庫-ui-ux-pro-max</code></div></div></div>
+
+<div class="skill"><div class="hd"><div class="ic">🏷️</div><div><div class="nm">品牌規範</div><div class="en">brand-guidelines</div></div></div>
+  <div class="ds">把<strong>品牌色、字體</strong>自動套到文件 / 簡報,保持風格一致。小編、做品牌、自由接案者讓作品看起來統一專業。</div>
+  <div class="row"><div class="lbl">怎麼用</div><div class="val ex">「把這份簡報套上我的品牌色」</div></div>
+  <div class="row"><div class="lbl">安裝</div><div class="val"><code>品牌規範-brand-guidelines</code></div></div></div>
+
+<h2 class="layer"><span class="lv">安裝</span>怎麼裝(3 步驟,新手照做)</h2>
+<p><strong>1.</strong> 下載這個包:GitHub 右上角綠色 <code>Code</code> → <code>Download ZIP</code></p>
+<p><strong>2.</strong> 把技能複製到你的 Claude 技能資料夾(一次全裝):</p>
+<pre>for d in skills/*/*/; do cp -r "$d" ~/.claude/skills/; done</pre>
+<p>只想裝某一個:<code>cp -r skills/檔案整理-file-organizer/file-organizer ~/.claude/skills/</code></p>
+<p><strong>3.</strong> 重開 Claude Code → 直接用講的就會觸發。</p>
+
+<div class="note tip"><strong>🎯 裝完怎麼用?</strong> <strong>不用記任何指令!</strong> 你只要「用講的」,Claude 會自動挑出對的技能來做。你不用說「用某某技能」,只要說「翻成英文提示詞」「下載這支影片」,它看懂了就會自動用那個技能。就像跟一個很會做事的助理講話 —— 講得越清楚(給什麼、要什麼、多長),做得越準。</div>
+
+<h2 class="layer"><span class="lv">之後開放</span>進階技能(要先裝環境)</h2>
+<p>這些超強但要先裝本地 AI 模型 / 轉錄工具,會另出<strong>進階包 + 安裝教學</strong>:🎥 YouTube 影片 → 中文逐字稿 + 重點報表　·　✂️ 長片 → 自動切多支短影音　·　🎙️ 聲音克隆　·　🔍 看圖反推提示詞。</p>
+
+<div class="end">
+  <div class="big">先從「每天都用得到」那幾個開始 · 熟了再加</div>
+  <div class="small" style="margin-top:6px">別一次全開來亂試　|　Rick Bowen · BEXS · 會員 / 學生專用</div>
+</div>
+
+</div>
+</body>
+</html>
