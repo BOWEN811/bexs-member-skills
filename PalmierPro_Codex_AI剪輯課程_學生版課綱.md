@@ -1,0 +1,190 @@
+# PalmierPro x AI 自動剪輯課｜學生版課綱
+
+這堂課會帶你學會：如何用 PalmierPro 搭配 Codex / Claude Code，把素材整理成可以檢查、可以修改、可以輸出的剪輯專案。
+
+重點不是只叫 AI「幫我剪好」，而是學會怎麼指揮 AI、怎麼看懂時間線、怎麼驗收聲音與字幕，最後完成一支可以交付的影片。
+
+---
+
+## 你會學到什麼
+
+- PalmierPro 基本介面與專案概念。
+- 如何整理影片、音訊、圖片、字幕素材。
+- Codex / Claude Code 在剪輯流程裡扮演什麼角色。
+- 什麼是 Skill，為什麼它可以讓 AI 固定照同一套流程剪片。
+- 如何判斷要用短影音剪輯，還是 YouTube 長片精修。
+- 如何下完整指令，讓 AI 知道素材路徑、影片比例、字幕要求、風格與驗收方式。
+- 如何檢查 PalmierPro 時間線：影片軌、音訊軌、音波、字幕素材、分段是否正確。
+- 如何回饋 AI 修正，而不是只說「不好看」或「怪怪的」。
+
+---
+
+## 這堂課會用到的兩個剪輯入口
+
+### 1. 短影音行銷剪輯
+
+Skill 名稱：
+
+```text
+ig-short-video-marketing-editor
+```
+
+適合：
+
+- IG Reels
+- YouTube Shorts
+- TikTok
+- 9:16 直式短影音
+- Podcast 訪談風格短片
+- 手機拍螢幕預告
+- 課程預告
+- 會員公告
+
+這個 Skill 裡有兩個常用風格：
+
+- **Podcast 訪談風格**：黑底高級字幕、主持人與受訪者分色、沒有露臉也能做成精緻短片。
+- **直式拍螢幕預告風**：手機拍螢幕、課程公告、展示工具或新功能，保留真實感，字幕不要黑底。
+
+### 2. YouTube 長片專案精修
+
+Skill 名稱：
+
+```text
+youtube-longform-project-finisher
+```
+
+適合：
+
+- YouTube 16:9 長片
+- 課程錄影
+- 長訪談
+- Podcast 長片
+- 教學長片
+- 字幕、音軌、章節、片頭片尾、B-roll 整理
+
+---
+
+## 上課前你要準備
+
+### 基本設備
+
+- Mac 或 Windows 筆電。
+- 穩定網路。
+- 充電器。
+- 耳機，方便檢查聲音。
+- 可以登入的 email / Google 帳號。
+
+### 軟體與帳號
+
+課堂會示範：
+
+- PalmierPro
+- Codex
+- Claude Code
+- GitHub 技能包
+
+你不一定要在上課前全部付費，但要先知道：
+
+- PalmierPro 是剪輯器。
+- Codex / Claude Code 是可以操作本機檔案的 AI agent。
+- ChatGPT 網頁版或 Claude 網頁版可以幫你寫文案、標題、封面提示詞，但通常不能直接修改你的本機 PalmierPro 專案。
+
+---
+
+## Mac / Windows 會不會有差
+
+剪輯邏輯一樣，差別在安裝方式與路徑。
+
+Mac 路徑通常像：
+
+```text
+/Users/你的名字/Desktop/course-demo/
+```
+
+Windows 路徑通常像：
+
+```text
+C:\Users\你的名字\Desktop\course-demo\
+```
+
+Windows 同學要特別注意：
+
+- 不要同時混用 PowerShell、Git Bash、WSL，先選一種環境。
+- 如果使用 WSL，要確認 PalmierPro 能不能讀到 AI 產出的檔案。
+- 指令裡一定要貼完整路徑，不要只說「在桌面」或「在下載」。
+
+---
+
+## 上課流程
+
+### 第一段：工具觀念
+
+你會先理解：
+
+- PalmierPro 是剪輯台。
+- AI agent 是剪輯助理。
+- Skill 是剪輯 SOP。
+- AI 說完成不算完成，PalmierPro 時間線看得到軌道才算完成。
+
+### 第二段：建立素材資料夾
+
+你會建立一個乾淨的專案資料夾：
+
+```text
+course-demo/
+  raw/
+  palmier/
+  assets/
+  transcript/
+  exports/
+  review/
+```
+
+這樣 AI、PalmierPro、你自己都找得到檔案。
+
+### 第三段：下第一個 AI 剪輯指令
+
+你會學會用這種格式下指令：
+
+```text
+請使用 ig-short-video-marketing-editor。
+素材路徑：［貼完整路徑］
+目標平台：IG Reels
+比例：9:16
+風格：Podcast 訪談風格
+字幕要求：每句有人聲都要有字幕，主持人與受訪者不能混
+完成後：請打開 PalmierPro，讓我看到 V 軌、A 軌音波、字幕素材與分段
+禁止事項：不要只跑 CLI 成片
+```
+
+### 第四段：驗收與修正
+
+你會學會檢查：
+
+- 聲音有沒有斷。
+- 字幕有沒有漏。
+- 主持人與受訪者有沒有混在一起。
+- IG 安全區有沒有被擋住。
+- PalmierPro 時間線上是否真的有剪輯軌道。
+
+---
+
+## 課後作業
+
+你要交：
+
+- 一支 9:16 短影音，或一段 16:9 長片精修片段。
+- 對應的 PalmierPro 專案。
+- 你使用的 Skill 名稱。
+- 你的第一版指令。
+- 你要求 AI 修改過的 3 個地方。
+
+---
+
+## 最重要的驗收標準
+
+請記住這句話：
+
+> 只交一個 mp4 不算完成。  
+> PalmierPro 打開，看得到影片軌、音訊軌、音波、字幕素材與分段，才算完成。
+

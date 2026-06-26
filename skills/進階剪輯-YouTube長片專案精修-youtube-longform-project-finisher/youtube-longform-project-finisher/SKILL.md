@@ -12,7 +12,7 @@ description: >-
 
 這是 Rick 的 16:9 YouTube / 課程 / 訪談長片專案精修入口。
 
-它不是 IG 短影音，不負責粥粥 Reels 或手機直拍預告。只要目標是 YouTube 長片、16:9、課程內容、長訪談、長教學，就用這個 skill。
+它不是 IG 短影音，不負責 Podcast 訪談 Reels 或手機直拍預告。只要目標是 YouTube 長片、16:9、課程內容、長訪談、長教學，就用這個 skill。
 
 ## 適用情境
 
@@ -25,7 +25,7 @@ description: >-
 不要用在：
 
 - 9:16 IG Reels / Shorts。
-- 粥粥訪談黑底字幕短片。
+- Podcast 訪談黑底字幕短片。
 - 手機直拍螢幕課程預告。
 
 以上都改用 `ig-short-video-marketing-editor`。

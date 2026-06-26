@@ -2,10 +2,10 @@
 name: ig-short-video-marketing-editor
 description: >-
   IG 短影片行銷自動剪輯。當 Rick 說「剪短影片專用 / IG短影片行銷 / 自動剪輯 / Reels / Shorts /
-  粥粥訪談風 / 周周訪談風 / 純訪談黑底字幕 / Podcast 訪談 / 主持人受訪者分開 / 字幕不能漏 /
+  Podcast 訪談風格 / 純訪談黑底字幕 / 主持人受訪者分開 / 字幕不能漏 /
   直式拍螢幕預告 / 手機拍螢幕 / 課程預告 / 會員公告 / PalmierPro x Codex /
   要看到音軌字幕軌 / 打開 PalmierPro 專案給我看 / 不要CLI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
-  內部分支為「粥粥訪談風」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
+  內部分支為「Podcast 訪談風格」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
   強制打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI/headless 成片。
 ---
 
@@ -17,14 +17,13 @@ description: >-
 
 ## 兩個內部分支
 
-### A. 粥粥訪談風
+### A. Podcast 訪談風格
 
 用在純訪談、Podcast 感、沒有露臉、沒有主畫面，重點是主持人與受訪者的對話。
 
 關鍵詞：
 
-- 粥粥訪談風
-- 周周訪談風
+- Podcast 訪談風格
 - 純訪談 Reels
 - Podcast 訪談
 - 黑底高級字幕
@@ -34,7 +33,7 @@ description: >-
 核心規則：
 
 - 先完整轉錄與讀字幕，再剪節奏。
-- 必須分清楚 speaker。Rick 固定 `RICK BOWEN / HOST`，受訪者用真名，例如 `粥粥 / GUEST`。
+- 必須分清楚 speaker。Rick 固定 `RICK BOWEN / HOST`，受訪者用真名，例如 `受訪者姓名 / GUEST`。
 - 有聲音就要有字幕，不可自行省略。
 - Rick 的話不能跑到受訪者名下，受訪者的話不能跑到 Rick 名下。
 - 自動 speaker 不穩時，要做 review UI，不能只靠聲波硬猜。
@@ -117,14 +116,14 @@ SAFE_BOTTOM = 1640
 - `ffprobe` 確認有 audio stream。
 - 抽查 0 秒、中段、尾段，字幕都有出現。
 - 聽一小段確認聲音沒有中斷。
-- 粥粥訪談風要抽查 speaker 切換點。
+- Podcast 訪談風格要抽查 speaker 切換點。
 - 直式拍螢幕預告風要抽查字幕沒有黑底、沒有蓋住手指或畫面重點。
 
 ## 交付格式
 
 完成後回報：
 
-- 使用分支：`粥粥訪談風` 或 `直式拍螢幕預告風`
+- 使用分支：`Podcast 訪談風格` 或 `直式拍螢幕預告風`
 - 成片路徑
 - PalmierPro 專案路徑
 - 已打開的 PalmierPro 專案名稱
