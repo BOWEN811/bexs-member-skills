@@ -7,7 +7,8 @@ description: >-
   第幾堂課做一下 / YouTube 標題簡介 / 章節 / chapters」等任何字眼，或丟出一個 .srt / 影片檔並要求做成
   可上架內容時觸發。專為 Rick 自己錄的「BEXS 黃金交易」與「BEXS 學院 AI 教學」兩類影片設計：字幕先繁體化 +
   依影片類型校正錯字，再一條龍產 YouTube 標題/簡介(含章節+hashtag)/封面提示詞(中英雙版)。
-  NOT for：別人家影片做 Podcast(用 yt-to-podcast)、切短影音(用 video-shorts)、看圖反推 prompt(用 sub2prompt)。
+  NOT for：別人家影片做 Podcast(用 yt-to-podcast)、剪短影音本體(用 ig-short-video-marketing-editor)、
+  YouTube 長片專案精修(用 youtube-longform-project-finisher)、看圖反推 prompt(用 sub2prompt)。
 ---
 
 # 🎬 Rick 影片上架助手 · rick-yt-publish
@@ -29,7 +30,8 @@ description: >-
 
 不要用在：
 
-- **剪出短影音本體**：依情境用 `video-shorts`、`interview-reels-dialogue-editor` 或 `palmier-pro-shorts-finisher`。
+- **剪出短影音本體**：用 `ig-short-video-marketing-editor`。
+- **YouTube / 課程 16:9 長片專案精修**：用 `youtube-longform-project-finisher`。
 - **只下載別人的 YouTube 做 Podcast**：改用 `yt-to-podcast`。
 
 ---
@@ -107,4 +109,5 @@ description: >-
 
 ## 相關
 - 交易字幕一條龍工具:`~/Desktop/下載YOUtube…rick-subtitle-tool/`(2_拖影片進來.command → Whisper+5階段;階段5=ai_polish.py)
-- 別搞混:`yt-to-podcast`(別人影片→Podcast)、`video-shorts`(切短片)、`sub2prompt`(看圖反推 prompt)。
+- 別搞混:`yt-to-podcast`(別人影片→Podcast)、`ig-short-video-marketing-editor`(剪 IG 短片)、
+  `youtube-longform-project-finisher`(YouTube 長片專案精修)、`sub2prompt`(看圖反推 prompt)。

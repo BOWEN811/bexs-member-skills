@@ -1,0 +1,130 @@
+---
+name: ig-short-video-marketing-editor
+description: >-
+  IG 短影片行銷自動剪輯。當 Rick 說「剪短影片專用 / IG短影片行銷 / 自動剪輯 / Reels / Shorts /
+  粥粥訪談風 / 周周訪談風 / 純訪談黑底字幕 / Podcast 訪談 / 主持人受訪者分開 / 字幕不能漏 /
+  直式拍螢幕預告 / 手機拍螢幕 / 課程預告 / 會員公告 / PalmierPro x Codex /
+  要看到音軌字幕軌 / 打開專案給我看 / 不要CI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
+  內部分支為「粥粥訪談風」與「直式拍螢幕預告風」。必須輸出可檢查 timeline/project，
+  強制打開本地 GUI 或預覽頁，不能只跑 headless/CI 成片。
+---
+
+# IG 短影片行銷自動剪輯
+
+這是 Rick 的 9:16 IG / Reels / Shorts 短影音剪輯總入口。
+
+之後短影音只記這一個入口；不同短影音風格在本 skill 內部分支處理。
+
+## 兩個內部分支
+
+### A. 粥粥訪談風
+
+用在純訪談、Podcast 感、沒有露臉、沒有主畫面，重點是主持人與受訪者的對話。
+
+關鍵詞：
+
+- 粥粥訪談風
+- 周周訪談風
+- 純訪談 Reels
+- Podcast 訪談
+- 黑底高級字幕
+- 主持人受訪者分開
+- Rick 跟受訪者不要混
+
+核心規則：
+
+- 先完整轉錄與讀字幕，再剪節奏。
+- 必須分清楚 speaker。Rick 固定 `RICK BOWEN / HOST`，受訪者用真名，例如 `粥粥 / GUEST`。
+- 有聲音就要有字幕，不可自行省略。
+- Rick 的話不能跑到受訪者名下，受訪者的話不能跑到 Rick 名下。
+- 自動 speaker 不穩時，要做 review UI，不能只靠聲波硬猜。
+- Review UI 要 autosave、自動播放下一段、保留 scroll position，可用快捷鍵 `1=Rick`、`2=受訪者`、`Space=播放`、`N=下一段`。
+- 9:16 黑底高級訪談視覺，字體統一 `PingFang TC`。
+- Rick 用金色，受訪者用青綠色，字幕斷句要像人看得懂。
+
+### B. 直式拍螢幕預告風
+
+用在手機直拍螢幕、手指指畫面、課程預告、會員公告、展示 Canva / PalmierPro / GitHub / Codex / Claude Code。
+
+關鍵詞：
+
+- 直式拍螢幕預告
+- 手機拍螢幕
+- 課程預告短片
+- 會員公告
+- 週末課
+- 展示新 skill
+- PalmierPro x Codex
+
+核心規則：
+
+- 保留手機直拍真實感，不要硬做成假廣告。
+- 刪掉找鏡頭、口誤、重複、結尾雜句。
+- 字幕用繁體中文，修正 Whisper 誤字。
+- 字幕不要用大黑底框；預設白字加細陰影 / 描邊。
+- 上方 POV / 課程標籤必須在 IG 安全區內。
+- 片長通常 20-60 秒，重點是 hook、賣點、CTA。
+
+## 強制可視化規則
+
+這是硬規則。不能只跑 CI / headless / 自動渲染後丟一個 mp4 路徑。
+
+每次執行都必須做出可檢查的剪輯結果：
+
+- 必須輸出可視化 timeline 或 project。
+- 必須打開本地 GUI、Palmier Pro 專案、或本地預覽頁給 Rick 看。
+- 必須讓音軌、字幕、分段素材能被檢查。
+- 如果用 Palmier Pro，至少要有可見 V1 / A1 分段，字幕素材或 overlay 要能在專案中辨識。
+- 如果不用 Palmier Pro，必須產生本地 preview/review 頁，能看到 video、audio waveform、caption segments、speaker labels。
+- 不可只回報「已輸出」或「CI pass」。
+
+標準輸出資料夾至少包含：
+
+```text
+project_or_preview/
+├── final.mp4
+├── transcript.json
+├── captions.srt 或 captions.ass
+├── segments.csv
+├── audio_check.txt
+└── preview.html 或 .palmier 專案
+```
+
+## IG 安全區
+
+1080x1920 保守安全區：
+
+```text
+SAFE_LEFT = 92
+SAFE_RIGHT = 988
+SAFE_TOP = 170
+SAFE_BOTTOM = 1640
+```
+
+規則：
+
+- 上方標題 / POV / 人名不可貼頂，起點至少 `y >= 180`。
+- 重要文字左右收在 `x=92..988`。
+- 右側避免重要文字，留給 Reels 按鈕。
+- 底部避免重要文字，留給帳號、文案、音訊資訊。
+- 若 Rick 提供新的安全區圖，以圖為準。
+
+## 音訊與字幕檢查
+
+輸出前必查：
+
+- `ffprobe` 確認有 audio stream。
+- 抽查 0 秒、中段、尾段，字幕都有出現。
+- 聽一小段確認聲音沒有中斷。
+- 粥粥訪談風要抽查 speaker 切換點。
+- 直式拍螢幕預告風要抽查字幕沒有黑底、沒有蓋住手指或畫面重點。
+
+## 交付格式
+
+完成後回報：
+
+- 使用分支：`粥粥訪談風` 或 `直式拍螢幕預告風`
+- 成片路徑
+- 可視化專案 / preview 路徑
+- 已打開哪個程式或預覽頁
+- 音訊、字幕、安全區檢查結果
