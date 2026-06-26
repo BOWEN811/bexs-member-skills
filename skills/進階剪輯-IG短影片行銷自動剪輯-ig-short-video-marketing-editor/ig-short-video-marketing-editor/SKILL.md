@@ -4,9 +4,9 @@ description: >-
   IG 短影片行銷自動剪輯。當 Rick 說「剪短影片專用 / IG短影片行銷 / 自動剪輯 / Reels / Shorts /
   粥粥訪談風 / 周周訪談風 / 純訪談黑底字幕 / Podcast 訪談 / 主持人受訪者分開 / 字幕不能漏 /
   直式拍螢幕預告 / 手機拍螢幕 / 課程預告 / 會員公告 / PalmierPro x Codex /
-  要看到音軌字幕軌 / 打開專案給我看 / 不要CI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
-  內部分支為「粥粥訪談風」與「直式拍螢幕預告風」。必須輸出可檢查 timeline/project，
-  強制打開本地 GUI 或預覽頁，不能只跑 headless/CI 成片。
+  要看到音軌字幕軌 / 打開 PalmierPro 專案給我看 / 不要CLI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
+  內部分支為「粥粥訪談風」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
+  強制打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI/headless 成片。
 ---
 
 # IG 短影片行銷自動剪輯
@@ -65,29 +65,30 @@ description: >-
 - 上方 POV / 課程標籤必須在 IG 安全區內。
 - 片長通常 20-60 秒，重點是 hook、賣點、CTA。
 
-## 強制可視化規則
+## 強制 PalmierPro 驗收規則
 
-這是硬規則。不能只跑 CI / headless / 自動渲染後丟一個 mp4 路徑。
+這是硬規則。不能只跑 CLI / headless / 自動渲染後丟一個 mp4 路徑。
 
 每次執行都必須做出可檢查的剪輯結果：
 
-- 必須輸出可視化 timeline 或 project。
-- 必須打開本地 GUI、Palmier Pro 專案、或本地預覽頁給 Rick 看。
-- 必須讓音軌、字幕、分段素材能被檢查。
-- 如果用 Palmier Pro，至少要有可見 V1 / A1 分段，字幕素材或 overlay 要能在專案中辨識。
-- 如果不用 Palmier Pro，必須產生本地 preview/review 頁，能看到 video、audio waveform、caption segments、speaker labels。
-- 不可只回報「已輸出」或「CI pass」。
+- 必須輸出 `.palmier` 專案，並打開 PalmierPro 給 Rick 看。
+- 必須讓 V 軌、A 軌、字幕素材/字幕軌、overlay、分段素材能被檢查。
+- A 軌必須看得到 waveform；字幕不能只燒進 mp4，必須有可辨識的字幕素材、字幕段或 overlay 檔在軌道上。
+- V1 / A1 不能是一整條看不出剪輯；剪過的片段、字幕段、CTA、封面/標籤都要在 timeline 上可檢查。
+- 本地 preview/review 頁只能當補充，不能取代 PalmierPro 驗收。若 PalmierPro 無法開啟，先回報原因並等待 Rick 確認，不可假裝已完成。
+- 不可只回報「已輸出」或「CLI 已完成」。
 
 標準輸出資料夾至少包含：
 
 ```text
 project_or_preview/
 ├── final.mp4
+├── project.palmier
 ├── transcript.json
 ├── captions.srt 或 captions.ass
 ├── segments.csv
 ├── audio_check.txt
-└── preview.html 或 .palmier 專案
+└── preview.html
 ```
 
 ## IG 安全區
@@ -125,6 +126,7 @@ SAFE_BOTTOM = 1640
 
 - 使用分支：`粥粥訪談風` 或 `直式拍螢幕預告風`
 - 成片路徑
-- 可視化專案 / preview 路徑
-- 已打開哪個程式或預覽頁
+- PalmierPro 專案路徑
+- 已打開的 PalmierPro 專案名稱
+- 字幕素材/字幕軌與 A 軌 waveform 在哪一條軌道
 - 音訊、字幕、安全區檢查結果

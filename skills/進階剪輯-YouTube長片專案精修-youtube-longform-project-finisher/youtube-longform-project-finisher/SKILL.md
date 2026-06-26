@@ -5,7 +5,7 @@ description: >-
   課程長片 / 訪談長片 / 幫我整理長片專案 / 長片字幕 / 長片音軌 / 長片剪輯軌道 /
   PalmierPro 長片 / 打開專案給我看」時觸發。用於 16:9 YouTube / 課程 / 訪談長片的專案精修、
   字幕音訊軌道整理、章節與包裝。不是 9:16 IG 短影音；短影音請用 `ig-short-video-marketing-editor`。
-  必須輸出可檢查 project/timeline 並打開 GUI 或預覽頁，不能只跑 CI 成片。
+  必須輸出可檢查 PalmierPro 專案並打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI 成片。
 ---
 
 # YouTube 長片專案精修版
@@ -30,28 +30,31 @@ description: >-
 
 以上都改用 `ig-short-video-marketing-editor`。
 
-## 強制可視化規則
+## 強制 PalmierPro 驗收規則
 
-這是硬規則。不能只跑 CI / headless / 自動渲染後丟一個 mp4 路徑。
+這是硬規則。不能只跑 CLI / headless / 自動渲染後丟一個 mp4 路徑。
 
 每次執行都必須：
 
-- 產生可檢查 project 或 timeline。
-- 打開 Palmier Pro、剪輯專案、或本地 preview/review 頁。
-- 音軌、字幕軌、章節與片段切點要能被檢查。
-- 如果有重剪，V1 / A1 / 字幕或 overlay 分段要清楚。
-- 不可只回報「已輸出」或「CI pass」。
+- 產生可檢查的 `.palmier` 專案。
+- 打開 PalmierPro，讓 Rick 直接看到 timeline。
+- V 軌、A 軌、字幕素材/字幕軌、章節標記、片段切點要能被檢查。
+- A 軌必須看得到 waveform；字幕不能只燒進 mp4，必須有可辨識的字幕素材、字幕段或 overlay 檔在軌道上。
+- 如果有重剪，V1 / A1 / 字幕或 overlay 分段要清楚，不能是一整條看不出剪輯。
+- 本地 preview/review 頁只能當補充，不能取代 PalmierPro 驗收。若 PalmierPro 無法開啟，先回報原因並等待 Rick 確認。
+- 不可只回報「已輸出」或「CLI 已完成」。
 
 標準輸出資料夾至少包含：
 
 ```text
 youtube_project_finish/
 ├── final_16x9.mp4
+├── project.palmier
 ├── transcript_cleaned.srt
 ├── chapters.txt
 ├── segments.csv
 ├── audio_check.txt
-└── preview.html 或 .palmier 專案
+└── preview.html
 ```
 
 ## 長片規格
@@ -71,7 +74,7 @@ youtube_project_finish/
 3. 再處理字幕：轉繁體、修錯字、斷句、匯出 SRT/ASS。
 4. 建立章節：依主題切出 YouTube chapters。
 5. 精修畫面：片頭、轉場、下三分之一、B-roll、重點字卡、片尾 CTA。
-6. 產生可視化專案或 preview，打開給 Rick 看。
+6. 產生 PalmierPro 專案並打開給 Rick 看；字幕素材/字幕軌與音訊 waveform 必須在軌道上可見。
 7. 輸出 final 16:9 成片。
 
 ## 檢查重點
@@ -88,7 +91,8 @@ youtube_project_finish/
 完成後回報：
 
 - 成片路徑
-- project / preview 路徑
-- 已打開哪個程式或預覽頁
+- PalmierPro 專案路徑
+- 已打開的 PalmierPro 專案名稱
+- 字幕素材/字幕軌與 A 軌 waveform 在哪一條軌道
 - 字幕、音訊、章節檢查結果
 - 是否另外需要 YouTube 上架包
