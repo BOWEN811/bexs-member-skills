@@ -7,7 +7,7 @@ description: >-
   要看到音軌字幕軌 / 打開 PalmierPro 專案給我看 / 不要CLI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
   內部分支為「Podcast 訪談風格」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
   強制打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI/headless 成片。
-  剪輯前必須完整抽字幕並理解全片；正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
+  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
   剪輯完成後必須全自動接 `rick-yt-publish` 產出上架包：CLI/Claude Code/Codex 有 skill 就直接接著用；Claude App/GPT App 不能呼叫本機 skill 時，也要在同一個最後回覆直接產出標題、簡介、章節、封面提示詞。
 ---
 
@@ -61,6 +61,15 @@ preflight 規則：
 4. 依完整理解再決定短影音切點、節奏、字幕斷句、畫面裁切、CTA 與輸出版本。
 
 不可只看檔名、只看前 30 秒、只靠聲波或只靠畫面猜內容後直接剪。前 30 秒 smoke test 只用來驗證工具鏈，不可取代完整字幕理解。
+
+PNG / 截圖省 token 規則：
+
+- 字幕內容理解一律使用 `.srt` / `.vtt` / `.ass` / `.txt` / `transcript.json` / Whisper 逐字稿。
+- 不得把整支影片切成大量 PNG 後靠 OCR 讀字幕，除非 Rick 明確要求，或字幕檔缺失且 Whisper/ASR 也失敗。
+- PNG / 截圖只用於 PalmierPro 視覺抽查：畫面比例、安全區、字幕位置、白字黑描邊、是否擋臉或遮住重點。
+- 預設只抽少量 keyframes：片頭 hook 1 張、每個大段落 1 張、字幕最密集處 2-3 張、片尾 1 張；短片通常不超過 8-12 張。
+- 不可用全量 PNG 抽查取代 `transcript_full.txt`、`captions.srt`、`segments.csv` 與 PalmierPro timeline 檢查。
+- 省 PNG 不等於跳過字幕樣式驗收；正式字幕仍必須白字黑描邊，優先檢查字幕樣式設定與 PalmierPro timeline，再用少量 keyframes 抽查實際畫面。
 
 字幕視覺統一規則：
 

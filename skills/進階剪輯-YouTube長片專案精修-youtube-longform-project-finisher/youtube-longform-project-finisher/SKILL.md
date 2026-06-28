@@ -6,7 +6,7 @@ description: >-
   PalmierPro 長片 / 打開專案給我看」時觸發。用於 16:9 YouTube / 課程 / 訪談長片的專案精修、
   字幕音訊軌道整理、章節與包裝。不是 9:16 IG 短影音；短影音請用 `ig-short-video-marketing-editor`。
   必須輸出可檢查 PalmierPro 專案並打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI 成片。
-  剪輯前必須完整抽字幕並理解全片；正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
+  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
   剪輯完成後必須全自動接 `rick-yt-publish` 產出 YouTube 上架包：CLI/Claude Code/Codex 有 skill 就直接接著用；Claude App/GPT App 不能呼叫本機 skill 時，也要在同一個最後回覆直接產出標題、簡介、章節、封面提示詞。
 ---
 
@@ -76,6 +76,15 @@ preflight 規則：
 4. 依完整理解再決定剪輯節奏、章節、轉場、B-roll、片頭片尾與 CTA。
 
 不可只看檔名、只看前 30 秒、只靠聲波或只靠畫面猜內容後直接剪。前 30 秒 smoke test 只用來驗證工具鏈，不可取代完整字幕理解。
+
+PNG / 截圖省 token 規則：
+
+- 字幕內容理解一律使用 `.srt` / `.vtt` / `.ass` / `.txt` / `transcript.json` / Whisper 逐字稿。
+- 不得把整支影片切成大量 PNG 後靠 OCR 讀字幕，除非 Rick 明確要求，或字幕檔缺失且 Whisper/ASR 也失敗。
+- PNG / 截圖只用於 PalmierPro 視覺抽查：畫面比例、字幕位置、白字黑描邊、是否擋臉或遮住重點、片頭片尾是否跑版。
+- 預設只抽少量 keyframes：片頭 1 張、每個章節或大段落 1 張、字幕最密集處 2-3 張、片尾 1 張；長片若章節很多，優先抽問題段落，不做全片逐秒截圖。
+- 不可用全量 PNG 抽查取代 `transcript_full.txt`、`transcript_cleaned.srt`、`chapters.txt`、`segments.csv` 與 PalmierPro timeline 檢查。
+- 省 PNG 不等於跳過字幕樣式驗收；正式字幕仍必須白字黑描邊，優先檢查字幕樣式設定與 PalmierPro timeline，再用少量 keyframes 抽查實際畫面。
 
 字幕視覺統一規則：
 
