@@ -6,6 +6,7 @@ description: >-
   PalmierPro 長片 / 打開專案給我看」時觸發。用於 16:9 YouTube / 課程 / 訪談長片的專案精修、
   字幕音訊軌道整理、章節與包裝。不是 9:16 IG 短影音；短影音請用 `ig-short-video-marketing-editor`。
   必須輸出可檢查 PalmierPro 專案並打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI 成片。
+  剪輯前必須完整抽字幕並理解全片；正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
 ---
 
 # YouTube 長片專案精修版
@@ -30,6 +31,58 @@ description: >-
 
 以上都改用 `ig-short-video-marketing-editor`。
 
+## 工具依賴與 preflight
+
+這是硬規則，給 Codex CLI / Claude Code 執行前使用。任何長片任務在讀素材、轉字幕、建立專案或輸出影片前，先做 preflight；缺工具時停止並回報，不可改用純文字推測或假裝已完成。
+
+必備本機工具：
+
+- PalmierPro：用來建立並打開可檢查的 `.palmier` 專案。
+- `ffmpeg`：用來轉檔、抽音訊、裁切測試片段、輸出成片。
+- `ffprobe`：用來檢查素材比例、長度、音訊 stream 與輸出檔有效性。
+- Whisper / MLX Whisper：優先使用 `mlx_whisper` 搭配 `large-v3-turbo` 產生字幕；若環境只有其他 Whisper CLI，先回報並等 Rick 確認替代方案。
+
+執行前必跑：
+
+```bash
+command -v ffmpeg
+command -v ffprobe
+command -v mlx_whisper
+open -Ra "PalmierPro"
+```
+
+若 `mlx_whisper` 不是獨立指令，再試：
+
+```bash
+python3 -m mlx_whisper --help
+```
+
+preflight 規則：
+
+- 任一必備工具缺失，就停止任務並列出缺哪個工具與建議安裝方向。
+- 不可在沒有 `ffmpeg` / `ffprobe` 時處理素材或聲音檢查。
+- 不可在沒有 Whisper / MLX Whisper 時自行腦補字幕；只能使用 Rick 已提供的 `.srt` / `.vtt` / `.ass`。
+- 不可在 PalmierPro 無法開啟時宣稱已完成 PalmierPro 專案；只能先輸出中間檔並回報卡點。
+- 正式處理前，先用素材前 30 秒做 smoke test：產生測試字幕、確認 audio stream、確認可建立或打開 PalmierPro 專案。
+
+## 全片理解與字幕硬規則
+
+這是硬規則。任何剪輯、切點、重排、章節、B-roll、字卡或成片輸出前，都必須先完成：
+
+1. 抽取或取得整支影片的完整字幕/逐字稿，不只抽片段。
+2. 清理字幕：去除重複、修正明顯 Whisper 誤字、補標點、保留時間碼。
+3. 讀完整份字幕，整理整部影片的主旨、段落、重點、可刪段落與不可刪段落。
+4. 依完整理解再決定剪輯節奏、章節、轉場、B-roll、片頭片尾與 CTA。
+
+不可只看檔名、只看前 30 秒、只靠聲波或只靠畫面猜內容後直接剪。前 30 秒 smoke test 只用來驗證工具鏈，不可取代完整字幕理解。
+
+字幕視覺統一規則：
+
+- 所有正式字幕一律白色文字加黑色描邊/外框。
+- 不使用彩色字幕文字；需要強調時用粗體、位置、節奏或獨立字卡處理。
+- 黑色描邊不是黑底框；不要用大面積黑色底框遮住畫面。
+- 字幕必須可讀、與聲音對齊，且不能壓到重要畫面。
+
 ## 強制 PalmierPro 驗收規則
 
 這是硬規則。不能只跑 CLI / headless / 自動渲染後丟一個 mp4 路徑。
@@ -50,10 +103,12 @@ description: >-
 youtube_project_finish/
 ├── final_16x9.mp4
 ├── project.palmier
+├── transcript_full.txt
 ├── transcript_cleaned.srt
 ├── chapters.txt
 ├── segments.csv
 ├── audio_check.txt
+├── edit_prompt_suggestions.md
 └── preview.html
 ```
 
@@ -63,19 +118,21 @@ youtube_project_finish/
 
 - 比例：16:9
 - 解析度：1920x1080 或依素材升到 4K
-- 字幕：繁體中文，必要時雙語
+- 字幕：繁體中文，必要時雙語；所有正式字幕一律白字黑描邊
 - 字體：優先 `PingFang TC`
 - 節奏：保留完整敘事，不像 Reels 那樣過度跳剪
 
 ## 標準流程
 
 1. 先看素材資訊：長度、比例、音軌、字幕、是否已有剪輯專案。
-2. 先修音訊：確認沒有靜音段、爆音、音量忽大忽小。
-3. 再處理字幕：轉繁體、修錯字、斷句、匯出 SRT/ASS。
-4. 建立章節：依主題切出 YouTube chapters。
-5. 精修畫面：片頭、轉場、下三分之一、B-roll、重點字卡、片尾 CTA。
-6. 產生 PalmierPro 專案並打開給 Rick 看；字幕素材/字幕軌與音訊 waveform 必須在軌道上可見。
-7. 輸出 final 16:9 成片。
+2. 抽取或取得完整字幕/逐字稿，清理成 `transcript_full.txt` 與 `transcript_cleaned.srt`。
+3. 讀完整字幕並寫出影片主旨、段落、重點、可刪段落與不可刪段落，再開始剪輯判斷。
+4. 先修音訊：確認沒有靜音段、爆音、音量忽大忽小。
+5. 建立章節：依主題切出 YouTube chapters。
+6. 精修畫面：片頭、轉場、下三分之一、B-roll、重點字卡、片尾 CTA。
+7. 套用字幕樣式：白色文字、黑色描邊/外框、繁體中文、必要時雙語。
+8. 產生 PalmierPro 專案並打開給 Rick 看；字幕素材/字幕軌與音訊 waveform 必須在軌道上可見。
+9. 輸出 final 16:9 成片。
 
 ## 檢查重點
 
@@ -96,3 +153,5 @@ youtube_project_finish/
 - 字幕素材/字幕軌與 A 軌 waveform 在哪一條軌道
 - 字幕、音訊、章節檢查結果
 - 是否另外需要 YouTube 上架包
+- `已完成：剪輯完成。`
+- 建議生成提示詞：依照這支成片內容，提供 3-5 條可直接複製的提示詞，用於封面、B-roll、社群短影音、YouTube 標題/描述或下一版修改。這段必須出現在 CLI、Claude App 或 GPT App 的最後回覆中，不能只寫進檔案。

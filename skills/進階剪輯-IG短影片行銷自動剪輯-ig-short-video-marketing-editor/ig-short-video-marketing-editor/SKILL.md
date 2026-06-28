@@ -7,6 +7,7 @@ description: >-
   要看到音軌字幕軌 / 打開 PalmierPro 專案給我看 / 不要CLI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
   內部分支為「Podcast 訪談風格」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
   強制打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI/headless 成片。
+  剪輯前必須完整抽字幕並理解全片；正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
 ---
 
 # IG 短影片行銷自動剪輯
@@ -14,6 +15,63 @@ description: >-
 這是 Rick 的 9:16 IG / Reels / Shorts 短影音剪輯總入口。
 
 之後短影音只記這一個入口；不同短影音風格在本 skill 內部分支處理。
+
+## 工具依賴與 preflight
+
+這是硬規則，給 Codex CLI / Claude Code 執行前使用。任何短影音任務在讀素材、轉字幕、切 segment、建立專案或輸出影片前，先做 preflight；缺工具時停止並回報，不可改用純文字推測或假裝已完成。
+
+必備本機工具：
+
+- PalmierPro：用來建立並打開可檢查的 `.palmier` 專案。
+- `ffmpeg`：用來轉檔、抽音訊、裁切測試片段、輸出 9:16 成片。
+- `ffprobe`：用來檢查素材比例、長度、音訊 stream 與輸出檔有效性。
+- Whisper / MLX Whisper：優先使用 `mlx_whisper` 搭配 `large-v3-turbo` 產生字幕；若環境只有其他 Whisper CLI，先回報並等 Rick 確認替代方案。
+
+執行前必跑：
+
+```bash
+command -v ffmpeg
+command -v ffprobe
+command -v mlx_whisper
+open -Ra "PalmierPro"
+```
+
+若 `mlx_whisper` 不是獨立指令，再試：
+
+```bash
+python3 -m mlx_whisper --help
+```
+
+preflight 規則：
+
+- 任一必備工具缺失，就停止任務並列出缺哪個工具與建議安裝方向。
+- 不可在沒有 `ffmpeg` / `ffprobe` 時處理素材或聲音檢查。
+- 不可在沒有 Whisper / MLX Whisper 時自行腦補字幕；只能使用 Rick 已提供的 `.srt` / `.vtt` / `.ass`。
+- 不可在 PalmierPro 無法開啟時宣稱已完成 PalmierPro 專案；只能先輸出中間檔並回報卡點。
+- 正式處理前，先用素材前 30 秒做 smoke test：產生測試字幕、確認 audio stream、確認可建立或打開 PalmierPro 專案。
+
+## 全域硬規則：字幕、理解、完成提示詞
+
+這些規則套用到本 skill 的所有 9:16 分支。任何切片、剪節奏、刪口誤、重排、加 hook、加 CTA、建立 PalmierPro 專案或輸出成片前，都必須先完成：
+
+1. 抽取或取得整支影片的完整字幕/逐字稿，不只抽片段。
+2. 清理字幕：去除重複、修正明顯 Whisper 誤字、補標點、保留時間碼。
+3. 讀完整份字幕，理解整部影片的主旨、段落、hook、賣點、CTA、可刪段落與不可刪段落。
+4. 依完整理解再決定短影音切點、節奏、字幕斷句、畫面裁切、CTA 與輸出版本。
+
+不可只看檔名、只看前 30 秒、只靠聲波或只靠畫面猜內容後直接剪。前 30 秒 smoke test 只用來驗證工具鏈，不可取代完整字幕理解。
+
+字幕視覺統一規則：
+
+- 所有正式字幕一律白色文字加黑色描邊/外框。
+- 不使用金色、青綠色或其他彩色字幕文字；需要區分 speaker 時，用姓名標籤、位置、排版或時間軸分段處理。
+- 黑色描邊不是黑底框；不要用大面積黑色底框遮住畫面。
+- 字幕必須可讀、與聲音對齊，且位於 IG 安全區內。
+
+完成後必須在 CLI、Claude App 或 GPT App 的最後回覆中寫：
+
+- `已完成：剪輯完成。`
+- 建議生成提示詞：依照這支成片內容，提供 3-5 條可直接複製的提示詞，用於封面、B-roll、社群文案、下一版修改或延伸短影音。不能只寫進檔案。
 
 ## 兩個內部分支
 
@@ -39,7 +97,7 @@ description: >-
 - 自動 speaker 不穩時，要做 review UI，不能只靠聲波硬猜。
 - Review UI 要 autosave、自動播放下一段、保留 scroll position，可用快捷鍵 `1=Rick`、`2=受訪者`、`Space=播放`、`N=下一段`。
 - 9:16 黑底高級訪談視覺，字體統一 `PingFang TC`。
-- Rick 用金色，受訪者用青綠色，字幕斷句要像人看得懂。
+- Rick 與受訪者都遵守白色字幕加黑色描邊；可用姓名標籤、位置或排版區分 speaker，字幕斷句要像人看得懂。
 
 ### B. 直式拍螢幕預告風
 
@@ -60,7 +118,7 @@ description: >-
 - 保留手機直拍真實感，不要硬做成假廣告。
 - 刪掉找鏡頭、口誤、重複、結尾雜句。
 - 字幕用繁體中文，修正 Whisper 誤字。
-- 字幕不要用大黑底框；預設白字加細陰影 / 描邊。
+- 字幕不要用大黑底框；預設白字加黑色描邊/外框。
 - 上方 POV / 課程標籤必須在 IG 安全區內。
 - 片長通常 20-60 秒，重點是 hook、賣點、CTA。
 
@@ -83,10 +141,12 @@ description: >-
 project_or_preview/
 ├── final.mp4
 ├── project.palmier
+├── transcript_full.txt
 ├── transcript.json
 ├── captions.srt 或 captions.ass
 ├── segments.csv
 ├── audio_check.txt
+├── edit_prompt_suggestions.md
 └── preview.html
 ```
 
@@ -129,3 +189,5 @@ SAFE_BOTTOM = 1640
 - 已打開的 PalmierPro 專案名稱
 - 字幕素材/字幕軌與 A 軌 waveform 在哪一條軌道
 - 音訊、字幕、安全區檢查結果
+- `已完成：剪輯完成。`
+- 建議生成提示詞：依成片內容提供 3-5 條可直接複製的提示詞，用於封面、B-roll、社群文案、下一版修改或延伸短影音。這段必須出現在 CLI、Claude App 或 GPT App 的最後回覆中，不能只寫進檔案。
