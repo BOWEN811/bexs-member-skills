@@ -7,6 +7,7 @@ description: >-
   字幕音訊軌道整理、章節與包裝。不是 9:16 IG 短影音；短影音請用 `ig-short-video-marketing-editor`。
   必須輸出可檢查 PalmierPro 專案並打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI 成片。
   剪輯前必須完整抽字幕並理解全片；正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
+  剪輯完成後必須全自動接 `rick-yt-publish` 產出 YouTube 上架包：CLI/Claude Code/Codex 有 skill 就直接接著用；Claude App/GPT App 不能呼叫本機 skill 時，也要在同一個最後回覆直接產出標題、簡介、章節、封面提示詞。
 ---
 
 # YouTube 長片專案精修版
@@ -83,6 +84,23 @@ preflight 規則：
 - 黑色描邊不是黑底框；不要用大面積黑色底框遮住畫面。
 - 字幕必須可讀、與聲音對齊，且不能壓到重要畫面。
 
+## 全自動接 rick-yt-publish
+
+這是硬規則。剪輯、輸出、PalmierPro 驗收完成後，不要等 Rick 再說「做上架包」，必須自動接 `rick-yt-publish` 的 YouTube 上架包流程。
+
+執行方式：
+
+- CLI / Claude Code / Codex：若 `rick-yt-publish` skill 已安裝，立刻用它處理本次成片、完整字幕、清理字幕、章節、段落與剪輯摘要。
+- CLI / Claude Code / Codex：若找不到 `rick-yt-publish` skill，不可停下；直接依同一規格內建產出上架包。
+- Claude App / GPT App：即使不能呼叫本機 skill，也要在同一個最後回覆直接產出完整上架包，不要只給「請接著使用 rick-yt-publish」的提示。
+- 不自動真的發布或上傳到 YouTube；只產出可複製的上架內容與封面提示詞，除非 Rick 明確要求發布。
+
+上架包至少包含：
+
+- `youtube_publish_package.md`：YouTube 標題 3-4 個、影片簡介、章節、hashtag、置頂留言建議。
+- `thumbnail_prompt_zh_en.md`：封面中文提示詞 + 英文提示詞，若有中文大字，提醒用本地工具或 Canva 疊字，避免生成模型中文字缺筆畫。
+- 最後回覆中的「上架包」區塊：直接貼出可複製的標題、簡介、章節、hashtag、封面提示詞。
+
 ## 強制 PalmierPro 驗收規則
 
 這是硬規則。不能只跑 CLI / headless / 自動渲染後丟一個 mp4 路徑。
@@ -109,6 +127,8 @@ youtube_project_finish/
 ├── segments.csv
 ├── audio_check.txt
 ├── edit_prompt_suggestions.md
+├── youtube_publish_package.md
+├── thumbnail_prompt_zh_en.md
 └── preview.html
 ```
 
@@ -155,3 +175,4 @@ youtube_project_finish/
 - 是否另外需要 YouTube 上架包
 - `已完成：剪輯完成。`
 - 建議生成提示詞：依照這支成片內容，提供 3-5 條可直接複製的提示詞，用於封面、B-roll、社群短影音、YouTube 標題/描述或下一版修改。這段必須出現在 CLI、Claude App 或 GPT App 的最後回覆中，不能只寫進檔案。
+- 自動接 `rick-yt-publish` 已完成：列出上架包檔案路徑，並在最後回覆直接貼出標題、簡介、章節、hashtag、封面中英提示詞。
