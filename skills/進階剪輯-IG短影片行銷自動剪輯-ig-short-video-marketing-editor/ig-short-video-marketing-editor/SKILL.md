@@ -7,7 +7,7 @@ description: >-
   要看到音軌字幕軌 / 打開 PalmierPro 專案給我看 / 不要CLI版本」時觸發。這是唯一的 9:16 短影音剪輯入口；
   內部分支為「Podcast 訪談風格」與「直式拍螢幕預告風」。必須輸出可檢查的 PalmierPro 專案，
   強制打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI/headless 成片。
-  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
+  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊，並用透明 PNG overlay 燒進最終 MP4；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
   剪輯完成後必須全自動接 `rick-yt-publish` 產出上架包：CLI/Claude Code/Codex 有 skill 就直接接著用；Claude App/GPT App 不能呼叫本機 skill 時，也要在同一個最後回覆直接產出標題、簡介、章節、封面提示詞。
 ---
 
@@ -66,7 +66,8 @@ PNG / 截圖省 token 規則：
 
 - 字幕內容理解一律使用 `.srt` / `.vtt` / `.ass` / `.txt` / `transcript.json` / Whisper 逐字稿。
 - 不得把整支影片切成大量 PNG 後靠 OCR 讀字幕，除非 Rick 明確要求，或字幕檔缺失且 Whisper/ASR 也失敗。
-- PNG / 截圖只用於 PalmierPro 視覺抽查：畫面比例、安全區、字幕位置、白字黑描邊、是否擋臉或遮住重點。
+- 這裡限制的是「用畫面 PNG / OCR 讀字幕」；正式字幕輸出仍必須把清理後字幕文字渲染成透明 PNG subtitle overlay。
+- 影片截圖 / keyframe PNG 只用於 PalmierPro 視覺抽查：畫面比例、安全區、字幕位置、白字黑描邊、是否擋臉或遮住重點。
 - 預設只抽少量 keyframes：片頭 hook 1 張、每個大段落 1 張、字幕最密集處 2-3 張、片尾 1 張；短片通常不超過 8-12 張。
 - 不可用全量 PNG 抽查取代 `transcript_full.txt`、`captions.srt`、`segments.csv` 與 PalmierPro timeline 檢查。
 - 省 PNG 不等於跳過字幕樣式驗收；正式字幕仍必須白字黑描邊，優先檢查字幕樣式設定與 PalmierPro timeline，再用少量 keyframes 抽查實際畫面。
@@ -77,6 +78,15 @@ PNG / 截圖省 token 規則：
 - 不使用金色、青綠色或其他彩色字幕文字；需要區分 speaker 時，用姓名標籤、位置、排版或時間軸分段處理。
 - 黑色描邊不是黑底框；不要用大面積黑色底框遮住畫面。
 - 字幕必須可讀、與聲音對齊，且位於 IG 安全區內。
+
+字幕輸出硬規則：
+
+- 正式字幕一律從清理後的 `.srt` / `.ass` / `transcript.json` 文字來源渲染成透明 PNG subtitle overlay。
+- PNG 字幕圖層必須是白色文字 + 黑色描邊；不可只畫黑字、不可只有黑框、不可用大黑底框。
+- PalmierPro 專案必須把 PNG 字幕圖層放在字幕 / overlay 軌，讓 Rick 看得到每段字幕素材。
+- 最終 `final.mp4` 必須把同一批 PNG subtitle overlay 燒進影片，輸出硬字幕 MP4；不要只輸出軟字幕、不要只留 `.srt/.ass`、不要只用 PalmierPro 內建文字，除非 Rick 明確改規格。
+- `.srt` / `.ass` 仍要保留，作為改字、校稿與重新生成 PNG 字幕圖層的來源。
+- 輸出後至少抽查片頭、中段、片尾三個成片畫面，確認字幕真的呈現白字黑描邊。
 
 完成後必須在 CLI、Claude App 或 GPT App 的最後回覆中寫：
 
@@ -157,7 +167,8 @@ PNG / 截圖省 token 規則：
 
 - 必須輸出 `.palmier` 專案，並打開 PalmierPro 給 Rick 看。
 - 必須讓 V 軌、A 軌、字幕素材/字幕軌、overlay、分段素材能被檢查。
-- A 軌必須看得到 waveform；字幕不能只燒進 mp4，必須有可辨識的字幕素材、字幕段或 overlay 檔在軌道上。
+- A 軌必須看得到 waveform；不能只有最終 MP4，timeline 上也必須有可辨識的 PNG 字幕素材、字幕段或 overlay 檔。
+- 字幕素材預設使用透明 PNG subtitle overlay，並在最終 MP4 中燒成硬字幕。
 - V1 / A1 不能是一整條看不出剪輯；剪過的片段、字幕段、CTA、封面/標籤都要在 timeline 上可檢查。
 - 本地 preview/review 頁只能當補充，不能取代 PalmierPro 驗收。若 PalmierPro 無法開啟，先回報原因並等待 Rick 確認，不可假裝已完成。
 - 不可只回報「已輸出」或「CLI 已完成」。
@@ -171,6 +182,7 @@ project_or_preview/
 ├── transcript_full.txt
 ├── transcript.json
 ├── captions.srt 或 captions.ass
+├── assets/subtitles/*.png
 ├── segments.csv
 ├── audio_check.txt
 ├── edit_prompt_suggestions.md

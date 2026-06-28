@@ -6,7 +6,7 @@ description: >-
   PalmierPro 長片 / 打開專案給我看」時觸發。用於 16:9 YouTube / 課程 / 訪談長片的專案精修、
   字幕音訊軌道整理、章節與包裝。不是 9:16 IG 短影音；短影音請用 `ig-short-video-marketing-editor`。
   必須輸出可檢查 PalmierPro 專案並打開 PalmierPro，讓 Rick 看見字幕素材/字幕軌、音訊 waveform 與剪輯分段在軌道上，不能只跑 CLI 成片。
-  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
+  剪輯前必須完整抽字幕並理解全片，字幕理解不得使用全量 PNG/OCR；PNG/截圖只做少量視覺抽查。正式字幕一律白字黑描邊，並用透明 PNG overlay 燒進最終 MP4；完成後必須在 CLI/Claude/GPT 回覆建議生成提示詞。
   剪輯完成後必須全自動接 `rick-yt-publish` 產出 YouTube 上架包：CLI/Claude Code/Codex 有 skill 就直接接著用；Claude App/GPT App 不能呼叫本機 skill 時，也要在同一個最後回覆直接產出標題、簡介、章節、封面提示詞。
 ---
 
@@ -81,7 +81,8 @@ PNG / 截圖省 token 規則：
 
 - 字幕內容理解一律使用 `.srt` / `.vtt` / `.ass` / `.txt` / `transcript.json` / Whisper 逐字稿。
 - 不得把整支影片切成大量 PNG 後靠 OCR 讀字幕，除非 Rick 明確要求，或字幕檔缺失且 Whisper/ASR 也失敗。
-- PNG / 截圖只用於 PalmierPro 視覺抽查：畫面比例、字幕位置、白字黑描邊、是否擋臉或遮住重點、片頭片尾是否跑版。
+- 這裡限制的是「用畫面 PNG / OCR 讀字幕」；正式字幕輸出仍必須把清理後字幕文字渲染成透明 PNG subtitle overlay。
+- 影片截圖 / keyframe PNG 只用於 PalmierPro 視覺抽查：畫面比例、字幕位置、白字黑描邊、是否擋臉或遮住重點、片頭片尾是否跑版。
 - 預設只抽少量 keyframes：片頭 1 張、每個章節或大段落 1 張、字幕最密集處 2-3 張、片尾 1 張；長片若章節很多，優先抽問題段落，不做全片逐秒截圖。
 - 不可用全量 PNG 抽查取代 `transcript_full.txt`、`transcript_cleaned.srt`、`chapters.txt`、`segments.csv` 與 PalmierPro timeline 檢查。
 - 省 PNG 不等於跳過字幕樣式驗收；正式字幕仍必須白字黑描邊，優先檢查字幕樣式設定與 PalmierPro timeline，再用少量 keyframes 抽查實際畫面。
@@ -92,6 +93,15 @@ PNG / 截圖省 token 規則：
 - 不使用彩色字幕文字；需要強調時用粗體、位置、節奏或獨立字卡處理。
 - 黑色描邊不是黑底框；不要用大面積黑色底框遮住畫面。
 - 字幕必須可讀、與聲音對齊，且不能壓到重要畫面。
+
+字幕輸出硬規則：
+
+- 正式字幕一律從清理後的 `.srt` / `.ass` / `transcript.json` 文字來源渲染成透明 PNG subtitle overlay。
+- PNG 字幕圖層必須是白色文字 + 黑色描邊；不可只畫黑字、不可只有黑框、不可用大黑底框。
+- PalmierPro 專案必須把 PNG 字幕圖層放在字幕 / overlay 軌，讓 Rick 看得到每段字幕素材。
+- 最終 `final_16x9.mp4` 必須把同一批 PNG subtitle overlay 燒進影片，輸出硬字幕 MP4；不要只輸出軟字幕、不要只留 `.srt/.ass`、不要只用 PalmierPro 內建文字，除非 Rick 明確改規格。
+- `.srt` / `.ass` 仍要保留，作為改字、校稿與重新生成 PNG 字幕圖層的來源。
+- 輸出後至少抽查片頭、中段、片尾三個成片畫面，確認字幕真的呈現白字黑描邊。
 
 ## 全自動接 rick-yt-publish
 
@@ -119,7 +129,8 @@ PNG / 截圖省 token 規則：
 - 產生可檢查的 `.palmier` 專案。
 - 打開 PalmierPro，讓 Rick 直接看到 timeline。
 - V 軌、A 軌、字幕素材/字幕軌、章節標記、片段切點要能被檢查。
-- A 軌必須看得到 waveform；字幕不能只燒進 mp4，必須有可辨識的字幕素材、字幕段或 overlay 檔在軌道上。
+- A 軌必須看得到 waveform；不能只有最終 MP4，timeline 上也必須有可辨識的 PNG 字幕素材、字幕段或 overlay 檔。
+- 字幕素材預設使用透明 PNG subtitle overlay，並在最終 MP4 中燒成硬字幕。
 - 如果有重剪，V1 / A1 / 字幕或 overlay 分段要清楚，不能是一整條看不出剪輯。
 - 本地 preview/review 頁只能當補充，不能取代 PalmierPro 驗收。若 PalmierPro 無法開啟，先回報原因並等待 Rick 確認。
 - 不可只回報「已輸出」或「CLI 已完成」。
@@ -132,6 +143,7 @@ youtube_project_finish/
 ├── project.palmier
 ├── transcript_full.txt
 ├── transcript_cleaned.srt
+├── assets/subtitles/*.png
 ├── chapters.txt
 ├── segments.csv
 ├── audio_check.txt
@@ -159,9 +171,9 @@ youtube_project_finish/
 4. 先修音訊：確認沒有靜音段、爆音、音量忽大忽小。
 5. 建立章節：依主題切出 YouTube chapters。
 6. 精修畫面：片頭、轉場、下三分之一、B-roll、重點字卡、片尾 CTA。
-7. 套用字幕樣式：白色文字、黑色描邊/外框、繁體中文、必要時雙語。
-8. 產生 PalmierPro 專案並打開給 Rick 看；字幕素材/字幕軌與音訊 waveform 必須在軌道上可見。
-9. 輸出 final 16:9 成片。
+7. 套用字幕樣式並渲染 PNG overlay：白色文字、黑色描邊/外框、繁體中文、必要時雙語。
+8. 產生 PalmierPro 專案並打開給 Rick 看；PNG 字幕素材/字幕軌與音訊 waveform 必須在軌道上可見。
+9. 輸出 final 16:9 成片，並把 PNG subtitle overlay 燒進 MP4。
 
 ## 檢查重點
 
